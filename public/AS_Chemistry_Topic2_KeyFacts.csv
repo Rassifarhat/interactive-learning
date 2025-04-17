@@ -1,0 +1,38 @@
+Question,Answer
+What are the charges and masses of subatomic particles?,"Proton: +1, mass 1; Neutron: 0, mass 1; Electron: -1, mass ~0"
+Where are the subatomic particles located?,Protons and neutrons are in the nucleus; electrons are in shells around the nucleus
+What is an isotope?,Atoms of the same element with the same number of protons but different numbers of neutrons
+Do isotopes have different chemical properties?,"No, because they have identical electronic configurations"
+What is relative atomic mass (Aᵣ)?,The weighted average mass of atoms of an element relative to 1/12th of a carbon-12 atom
+What is relative isotopic mass?,Mass of an isotope compared to 1/12th of a carbon-12 atom
+How is relative atomic mass calculated from mass spectrometry data?,Σ(isotopic mass × relative abundance) / 100
+What does a mass spectrometer detect?,It detects ions and separates them by mass-to-charge ratio
+What is the M peak in a mass spectrum?,"The peak with the highest m/z ratio, showing the relative molecular mass"
+How is the relative molecular mass of Cl₂ calculated?,"Using isotope ratio 9:6:1 from peaks at m/z = 70, 72, and 74"
+What is an orbital?,A region of space where there is a high probability of finding an electron
+How many electrons can an orbital hold?,Each orbital holds 2 electrons with opposite spins
+"What are the s, p, and d orbitals?",s is spherical; p has 3 dumbbell-shaped orbitals; d has 5 more complex shapes
+"How many electrons fit in s, p, d sub-shells?","s: 2, p: 6, d: 10"
+What is the electron configuration of sodium (Z=11)?,1s² 2s² 2p⁶ 3s¹
+What is the Pauli Exclusion Principle?,Two electrons in an orbital must have opposite spins
+What is Hund’s Rule?,Electrons fill orbitals singly before pairing
+What is ionisation energy?,The energy required to remove 1 mole of electrons from 1 mole of gaseous atoms
+Is ionisation energy endothermic or exothermic?,Always endothermic
+What 3 factors affect ionisation energy?,"Nuclear charge, atomic radius, electron shielding"
+What is the trend in ionisation energy across a period?,Generally increases due to increasing nuclear charge
+What is the trend in ionisation energy down a group?,Decreases due to increased shielding and atomic radius
+Why is the second ionisation energy higher than the first?,Electron is removed from a more positively charged ion and often a closer shell
+Why does ionisation energy drop between groups 2 and 3?,"Electron enters a p orbital, which is higher in energy and more shielded"
+Why does ionisation energy drop between groups 5 and 6?,"Electron pairing occurs in the p orbital, causing repulsion"
+What is the trend in atomic radius across a period?,Decreases due to increasing nuclear charge pulling electrons closer
+What is the trend in atomic radius down a group?,Increases due to added shells and increased shielding
+How are melting and boiling points affected across a period?,"In Period 2 and 3, they vary due to type of bonding and structure (metallic, covalent)"
+What block are transition elements in?,d-block
+What determines the block of an element?,"The sub-shell being filled (s, p, d)"
+What is the electronic configuration of potassium (Z=19)?,1s² 2s² 2p⁶ 3s² 3p⁶ 4s¹
+Which orbital fills first: 3d or 4s?,4s fills before 3d
+What is the definition of first ionisation energy?,Energy to remove one electron from each atom in 1 mole of gaseous atoms
+Which element has the highest first ionisation energy?,Helium
+Why do isotopes have the same chemical properties?,They have the same number and arrangement of electrons
+Why is there a large jump in successive ionisation energies?,It occurs when removing an electron from a new shell closer to the nucleus
+How many orbitals are in the 2p sub-shell?,"Three: 2px, 2py, 2pz"

@@ -1,0 +1,63 @@
+"Discuss the trade-offs involved in the design of a computer system's memory hierarchy. Analyze the factors that influence the choice of different memory components (registers, cache, main memory, secondary storage) and explain why a compromise is necessary to balance cost, speed, and capacity.","The memory hierarchy balances access speed, capacity, and cost. Registers and cache, located closest to the CPU, provide the fastest access times but are expensive per byte and offer limited capacity. Main memory (RAM) sits below cache in speed and cost, offering greater capacity at lower cost. Secondary storage—such as hard disks and SSDs—provides large, non-volatile capacity at the lowest cost per byte but with much slower access. Designers choose a mix of these components to ensure that frequently accessed data resides in faster, costlier layers, while bulk data is kept in slower, cheaper layers. This compromise ensures overall system performance and cost‐effectiveness."
+"Compare and contrast the different types of secondary storage media discussed in the text (magnetic, optical, and solid-state). For each type, describe its fundamental working principles, key advantages, and disadvantages, and discuss their current relevance in modern computing systems.","Magnetic media (hard disks, tapes) store data via magnetic polarization of platters or tape surfaces. Advantages include low cost per gigabyte and high capacity; disadvantages include mechanical parts prone to wear and lower access speeds. Optical media (CD, DVD, Blu‑ray) use laser reflection to read pits and lands in a spiral track. They offer portability and durability but limited rewritability and lower capacity compared to other media. Solid-state media (SSDs, flash drives) use semiconductor cells to store charges; they have no moving parts, providing fast random access, low latency, and mechanical resilience. However, they remain more expensive per gigabyte and have finite write cycles. Today, SSDs dominate for system drives due to performance, while magnetic drives serve archival needs and optical media are used for distribution and backups."
+"Explain the operational principles of two distinct output devices provided for a user of a general-purpose computer system (e.g., screen display and printer). For each device, describe the underlying technology and how it converts digital data into a human-perceptible output.","Screen displays use a pixel matrix to form images. In an LCD, each pixel has red, green, and blue sub‑pixels whose liquid crystals modulate backlighting intensity. Voltage applied to each sub‑pixel changes crystal orientation, controlling light transmission and thus color. The rapid refresh of pixels creates smooth images. Printers convert digital page descriptions into hardcopy. In a laser printer, a rotating drum is electrostatically charged; a laser selectively discharges areas corresponding to image data. Toner particles adhere to discharged regions, are transferred to paper, and fused by heat rollers to produce permanent text or graphics."
+"Describe the functionality of two different input devices used in a general-purpose computer system (e.g., keyboard and touch screen). Explain how each device captures user input and how this input is processed by the computer system. Consider the advantages and disadvantages of each for different user interactions.","A keyboard uses a key matrix where each key press closes a circuit at a unique row‑column intersection. A microcontroller scans these intersections, identifies the pressed key, looks up its character code in ROM, and sends it to the CPU for processing and display. Keyboards excel at precise text entry but are less intuitive for spatial gestures. Touch screens detect contact via resistive or capacitive sensing. In capacitive screens, a finger alters local capacitance; the controller measures these changes to compute coordinates. Touch screens support direct, intuitive interaction but can suffer false touches and require calibration."
+Discuss the increasing prevalence of embedded systems and the implications of connecting them to networks as part of the Internet of Things (IoT). Analyze the benefits of network connectivity for embedded systems and the emerging security concerns associated with their increased accessibility.,"Embedded systems are now ubiquitous in appliances, vehicles, and sensors. Embedding connectivity enables remote monitoring, firmware updates, and data aggregation, enhancing functionality and efficiency in IoT ecosystems. Networked embedded devices can optimize resource use, support predictive maintenance, and integrate seamlessly into larger applications. However, their constrained hardware often lacks robust security measures, making them vulnerable entry points for cyberattacks. Issues include inadequate encryption, weak authentication, and limited update mechanisms. Therefore, secure design, regular patching, and network segmentation are critical to mitigate risks."
+What is CPU (Central Processing Unit)?,The primary component of a computer that executes instructions and performs data processing.
+What is Memory (Primary Storage)?,"The component of a computer system that the processor can access directly, used for storing data that is actively being processed."
+What is File Store (Secondary Storage)?,Components used for the long-term storage of data that is not immediately being processed by the CPU.
+What is Memory Hierarchy?,"A layered structure of storage components in a computer system, organized by speed, cost, and capacity (registers, cache, main memory, secondary storage)."
+What is Register?,"A small, high-speed storage location within the CPU used to hold data that is currently being processed."
+What is Cache Memory?,"A small, fast memory component located closer to the CPU than main memory, used to store frequently accessed data for quicker retrieval."
+What is Main Memory (RAM)?,"The primary working memory of a computer, used to store data and instructions that the CPU is actively using. It is typically volatile."
+What is Secondary Storage?,"Non-volatile storage used for long-term data retention, such as hard drives, SSDs, and optical discs."
+What is Embedded System?,A special-purpose computer system designed to perform a specific function within a larger mechanical or electrical system.
+What is Microcontroller?,"An integrated circuit that contains a processor, memory, and I/O peripherals on a single chip, commonly used in embedded systems."
+What is IoT (Internet of Things)?,"A network of physical objects ('things') embedded with sensors, software, and other technologies that enable them to collect and exchange data."
+What is RAM (Random-Access Memory)?,A type of volatile memory that allows data to be accessed in any order. Commonly used as main memory.
+What is DRAM (Dynamic RAM)?,A type of RAM that uses capacitors to store data and requires periodic recharging to maintain the data.
+What is SRAM (Static RAM)?,"A type of RAM that uses flip-flops to store data and retains data as long as power is supplied, without needing to be refreshed as often as DRAM."
+What is ROM (Read-Only Memory)?,A type of non-volatile memory that typically stores data or programs that are not meant to be changed during normal operation.
+What is PROM (Programmable ROM)?,A type of ROM that can be programmed once by the user.
+What is EPROM (Erasable PROM)?,A type of ROM that can be erased (usually with ultraviolet light) and reprogrammed.
+What is EEPROM (Electrically Erasable PROM)?,A type of ROM that can be erased and reprogrammed electrically while remaining in the circuit.
+What is Buffer?,A temporary storage area used to hold data during transfer between devices or processes with different data rates.
+What is Device Driver?,Software that enables the operating system to interact with and control a specific hardware device.
+What is Magnetic Media?,"Storage media that use magnetic patterns to represent data, such as hard disks and magnetic tape."
+What is Track?,"A concentric circle on a magnetic disk where data is stored. On an optical disc, it is a single spiral."
+What is Sector?,"A subdivision of a track on a magnetic or optical disk, representing the smallest unit of storage."
+What is Cylinder?,A set of tracks on different platters of a hard disk that are located at the same radial distance from the spindle.
+What is Optical Media?,"Storage media that use lasers to read and write data, such as CDs, DVDs, and Blu-ray discs."
+What is Pit?,An indentation on the surface of an optical disc.
+What is Land?,A flat area on the surface of an optical disc between pits.
+What is Solid-State Media?,"Electronic storage devices with no moving parts, such as flash memory used in memory sticks and SSDs."
+What is Flash Memory?,A type of non-volatile solid-state memory that can be electrically erased and reprogrammed.
+What is SSD (Solid-State Drive)?,"A storage device that uses flash memory to store data, offering faster access speeds and greater durability compared to traditional hard disk drives."
+What is Pixel?,"The smallest addressable unit of a digital image or display. On a screen, it typically consists of red, green, and blue sub-pixels."
+What is CRT (Cathode Ray Tube)?,An older display technology that uses an electron beam to illuminate phosphors on the screen.
+What is LCD (Liquid-Crystal Display)?,A flat-panel display technology that uses liquid crystals to control the transmission of light through polarized filters.
+What is LED (Light-Emitting Diode)?,A semiconductor light source commonly used for backlighting in LCD screens.
+What is Virtual Reality Headset?,A wearable device that provides immersive virtual experiences by displaying stereoscopic images to the user's eyes and often tracking head movements.
+What is Inkjet Printer?,A type of printer that forms images by spraying tiny droplets of ink onto paper.
+What is Laser Printer?,"A type of printer that uses a laser beam to create an electrostatic image on a drum, which then attracts toner that is fused onto the paper."
+What is Plotter?,"A type of output device used to create hard-copy graphics, often using pens to draw on large sheets of paper."
+What is 3D Printer?,A device that builds three-dimensional objects layer by layer from a digital design.
+What is CAD (Computer-Aided Design)?,Software used to create detailed 2D or 3D designs.
+What is CAM (Computer-Aided Manufacture)?,The use of computer software to control manufacturing machinery.
+What is Key Matrix?,An array of electrical circuits beneath the keys of a keyboard that detects when a key is pressed.
+What is GUI (Graphical User Interface)?,"A type of user interface that allows users to interact with electronic devices through visual icons, menus, and other graphical elements rather than text-based commands."
+What is Touch Screen?,A display screen that allows a user to interact with a computer by touching areas of the screen.
+What is Resistive Touch Screen?,A touch screen technology that relies on pressure causing two conductive layers to make contact.
+What is Capacitive Touch Screen?,A touch screen technology that detects changes in electrical capacitance caused by a touch.
+What is PCT (Projective Capacitive Touch)?,A type of capacitive touch screen technology that can detect multiple touch points simultaneously.
+What is Webcam?,"A video camera connected to a computer, often used for video conferencing or streaming."
+What is Digital Camera?,A camera that captures photographs and videos digitally.
+What is Scanner?,An input device that captures a digital representation of a physical image or document.
+What is CCD (Charge-Coupled Device)?,A light-sensitive component used in scanners and digital cameras to convert light into an electrical signal.
+What is ADC (Analogue-to-Digital Converter)?,"A circuit that converts an analogue signal (e.g., from a microphone or CCD) into a digital signal."
+What is Voice Recognition?,Technology that enables a computer to understand spoken words and convert them into text or commands.
+What is Voice Synthesis?,Technology that enables a computer to produce human-like speech from digital text.
+What is Microphone?,An input device that converts sound waves into an electrical signal.
+What is Speaker (Loudspeaker)?,An output device that converts an electrical signal into sound waves.
+What is DAC (Digital-to-Analogue Converter)?,"A circuit that converts a digital signal into an analogue signal (e.g., to drive a speaker)."
+What is Sound (Audio) Card?,An expansion card in a computer that provides audio input and output capabilities.

@@ -1,0 +1,10 @@
+# Bond Polarity Role
+Bond polarity influences the type of mechanism:
+
+1. Non-polar or slightly polar bonds favor homolytic fission
+2. Polar bonds favor heterolytic fission
+
+Saved on: 2025-04-16T14:59:35.020Z
+
+---
+

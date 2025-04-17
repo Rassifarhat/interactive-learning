@@ -1,0 +1,15 @@
+# Systematic Names
+When an element can have more than one oxidation state, the names of its compounds and its ions often include the oxidation number of the element, written as a Roman numeral in brackets. This name is often referred to as the 'systematic name'.
+
+Examples include:
+• FeCl₂: iron(II) chloride
+• FeCl₃: iron(III) chloride
+• KMnO₄: potassium manganate(VII)
+• K₂MnO₄: potassium manganate(VI)
+• CrO₄²⁻: chromate(VI) ion
+• Cr₂O₃²⁻: chromate(VI) ion
+
+Saved on: 2025-04-14T15:16:13.014Z
+
+---
+

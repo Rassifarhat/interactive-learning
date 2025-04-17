@@ -1,0 +1,39 @@
+"Discuss the importance of data validation and verification in computer systems. Provide examples of validation and verification techniques and explain their roles in ensuring data integrity.","Data validation ensures input data conforms to required formats and constraints (e.g., range checks, type checks), preventing errors and security issues. Verification confirms data is correctly transferred or processed (e.g., double-entry, checksums). Both techniques maintain data integrity, reliability, and security in systems like databases, transaction processing, and user interfaces."
+"Explain the concepts of database normalization and denormalization. Discuss the advantages and trade-offs of each approach in database design and performance.","Normalization organizes data to reduce redundancy and improve integrity, using techniques like splitting tables and defining relationships. Denormalization intentionally introduces redundancy to optimize query performance. Normalization benefits data consistency and storage efficiency, while denormalization can speed up read-heavy workloads at the cost of potential anomalies. Designers balance both based on application needs."
+Define data integrity and explain why it is important for organizations that store data.,"Data integrity refers to the accuracy and being up-to-date of data. It is crucial for organizations because they rely on this data for informed decision-making, operational efficiency, and maintaining trust with stakeholders. Inaccurate or outdated data can lead to errors, financial losses, and reputational damage."
+What is the primary focus of data protection laws concerning individuals and organizations?,"Data protection laws focus on ensuring individuals have control over their personal data supplied to organizations, used only for agreed purposes, and obligate organizations to protect its privacy and integrity."
+"Explain the relationship between data security, data integrity, and data privacy. Can one be achieved without the others?","Data security is the foundation ensuring data is available and untampered. Data integrity builds on security by maintaining accuracy, and data privacy ensures unauthorized access is prevented. Security is necessary but not sufficient for integrity or privacy."
+Describe two distinct types of threats to the security of a computer system and the data stored within it.,One threat is unauthorized intrusion by hackers gaining access to systems to steal or corrupt data. Another threat is natural disasters that can damage hardware and cause data loss if proper backups and disaster recovery plans are not in place.
+"What is malware, and what are two common ways it can be introduced into a computer system by a user?",Malware is malicious software introduced for harmful purposes. Common introduction methods include opening infected email attachments and connecting infected portable storage devices to the system.
+"Differentiate between a virus and a worm, two categories of malware-containing program code.","A virus attaches itself to other executable code and replicates within it, whereas a worm is a standalone program that can self-replicate and spread across networked hosts without needing to attach to other code."
+Explain the purpose of a firewall and briefly describe how it helps protect a computer system.,"A firewall controls incoming and outgoing network traffic based on security rules, acting as a barrier to block unauthorized access and filter malicious content to protect the system from network-based threats."
+Describe the main goal of a data backup procedure and list two common principles followed in traditional backup strategies.,The main goal of data backup is to create copies of data for recovery in case of loss or corruption. Common principles include regular full backups with multiple generations stored offsite and daily incremental backups to capture recent changes.
+Explain the concept of data validation during data entry and provide one example of a validation check.,Data validation ensures entered data conforms to predefined rules to prevent incorrect types or formats. An example is a format check ensuring dates are entered in the DD/MM/YYYY format.
+"How does a parity check work during data transmission, and what is one limitation of this method?",A parity check adds an extra bit to ensure the number of 1s is even or odd as specified. It detects errors if parity is wrong but cannot identify which bit is corrupted or correct the error.
+What is Data Integrity?,The accuracy and being up-to-date of data.
+What is Data Privacy?,Keeping data private and controlling which data about an individual is made public.
+What is Data Security?,Ensuring that data is available for use when needed and that the data made available is the originally stored data.
+What is Malware?,Malicious software introduced into a system for a harmful purpose.
+What is Virus?,Malware that tries to replicate itself by attaching to other executable code.
+What is Worm?,Malware that runs independently and transfers itself to other network hosts.
+What is Logic Bomb?,Malware that stays inactive until a specific condition is met.
+What is Trojan Horse?,Malware that replaces all or part of a previously useful program.
+What is Spyware?,Malware that collects information and transmits it to another system.
+What is Bot?,Malware that takes control of another computer and uses it to launch attacks.
+What is Phishing?,A type of online fraud where attackers deceive users into revealing confidential information through fake communications.
+What is Pharming?,A type of online fraud that redirects users to bogus websites that mimic legitimate ones to steal information.
+What is Keylogger?,Software or hardware that records the keyboard usage of a computer user to capture sensitive data.
+What is Hacker?,An individual intent on gaining unauthorized access to a computer system.
+What is Firewall?,"A security system, either hardware or software, that controls network traffic based on predetermined security rules."
+What is Digital Signature?,An electronic signature that verifies the authenticity and integrity of a digital message or document.
+What is Anti-virus Software?,"Software designed to detect, prevent, and remove malware from a computer system."
+What is Intrusion Detection System (IDS)?,A system that monitors network or system activities for malicious activity or security policy violations.
+What is Disaster Recovery?,Policies and procedures designed to enable the recovery of critical technology systems following a disruptive event.
+What is Hot Site?,A fully equipped and operational alternative system location for immediate failover in case of primary system failure.
+What is User Authentication?,The process of verifying the identity of a user attempting to access a computer system or network.
+What is Data Validation?,"Software-based checks to ensure that data entered into a system is of the correct type, format, or within an acceptable range."
+What is Data Verification?,"Methods used to confirm that the data entered into a system matches the intended data, such as double entry or visual checks."
+What is Check Digit?,An extra digit added to a number to detect errors in data entry or transmission by verifying a calculated remainder.
+What is Checksum?,A value calculated from a block of data used to detect errors during data transmission.
+What is Parity Check?,A method of error detection during transmission that adds a parity bit to ensure correct parity for each byte.
+What is Parity Block Check?,An error detection and correction method using parity bits both horizontally and vertically across data blocks.
