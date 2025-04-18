@@ -17,6 +17,7 @@ import Mathematics from './components/Mathematics';
 export default function Home() {
   const [subject, setSubject] = React.useState<string | null>(null);
   const [showRevision, setShowRevision] = React.useState<boolean>(false);
+  const [showRequirements, setShowRequirements] = React.useState<boolean>(false);
   const [revisionSubject, setRevisionSubject] = React.useState<'chem'|'cs'|null>(null);
 
   return (
@@ -44,9 +45,15 @@ export default function Home() {
         </button>
         <button
           className={`px-6 py-3 rounded bg-green-700 text-white hover:bg-green-800 transition-all text-xl font-semibold ${subject === 'chem' ? 'ring-2 ring-yellow-400' : ''}`}
-          onClick={() => setSubject('chem')}
+          onClick={() => { setSubject('chem'); setShowRevision(false); setShowRequirements(false); }}
         >
           Chemistry
+        </button>
+        <button
+          className="px-6 py-3 rounded bg-green-600 text-white hover:bg-green-700 transition-all text-xl font-semibold"
+          onClick={() => { setShowRequirements(true); setShowRevision(false); setSubject(null); setRevisionSubject(null); }}
+        >
+          Chemistry Requirements
         </button>
         <button
           className={`px-6 py-3 rounded bg-purple-700 text-white hover:bg-purple-800 transition-all text-xl font-semibold ${subject === 'phys' ? 'ring-2 ring-yellow-400' : ''}`}
@@ -68,7 +75,7 @@ export default function Home() {
         </button>
       </div>
       <div className="w-full flex flex-col items-center">
-        {!showRevision && (
+        {!showRevision && !showRequirements && (
           <>
             {subject === 'chem' && <Chemistry />}
             {subject === 'cs' && <ComputerScience />}
@@ -95,18 +102,27 @@ export default function Home() {
         {showRevision && revisionSubject === 'chem' && (
           <div className="flex flex-wrap gap-4 justify-center mb-10">
             {Array.from({ length: 10 }, (_, i) => (
-              <button key={i + 1} className="px-4 py-2 border rounded m-1">
+              <Link key={i + 1} href={`/flashcards?file=revisionNotes/chemistry/chemCardsCh${i + 1}.csv`} className="px-4 py-2 border rounded m-1">
                 Chapter {i + 1}
-              </button>
+              </Link>
             ))}
           </div>
         )}
         {showRevision && revisionSubject === 'cs' && (
           <div className="flex flex-wrap gap-4 justify-center mb-10">
             {Array.from({ length: 15 }, (_, i) => (
-              <button key={i + 1} className="px-4 py-2 border rounded m-1">
+              <Link key={i + 1} href={`/flashcards?file=revisionNotes/computerScience/csCardsCh${i + 1}.csv`} className="px-4 py-2 border rounded m-1">
                 Chapter {i + 1}
-              </button>
+              </Link>
+            ))}
+          </div>
+        )}
+        {showRequirements && (
+          <div className="flex flex-wrap gap-4 justify-center mb-10">
+            {Array.from({ length: 10 }, (_, i) => (
+              <Link key={i + 1} href={`/reqChemCh${i + 1}`} className="px-4 py-2 border rounded m-1">
+                Chapter {i + 1}
+              </Link>
             ))}
           </div>
         )}

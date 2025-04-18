@@ -20,3 +20,82 @@ Saved on: 2025-04-16T14:59:35.020Z
 ---
 
 "
+,,"What is: # Thick-Client
+A thick-client (also called a fat-client or rich-client) has more processing power and capabilities than a thin-client. It:
+
+- Chooses an application provided by the server
+- May perform processing before sending data to the server and after receiving output
+- Can download applications from the server to run locally
+
+Thick-clients reduce the processing load on servers and can function with intermittent network connectivity.
+
+Saved on: 2025-04-17T17:41:37.118Z
+
+---
+
+","# Thick-Client
+A thick-client (also called a fat-client or rich-client) has more processing power and capabilities than a thin-client. It:
+
+- Chooses an application provided by the server
+- May perform processing before sending data to the server and after receiving output
+- Can download applications from the server to run locally
+
+Thick-clients reduce the processing load on servers and can function with intermittent network connectivity.
+
+Saved on: 2025-04-17T17:41:37.118Z
+
+---
+
+"
+computerScience,1,"What is: # Hexadecimal Conversions
+Converting hexadecimal to binary: Each hex digit converts to 4 bits
+0 → 0000, 1 → 0001, ..., 9 → 1001, A → 1010, B → 1011, ..., F → 1111
+
+Converting binary to hexadecimal: Group bits into sets of 4, starting from the right, and convert each group to a hex digit.
+
+Example: Binary 1011 0101 to hex: 1011 = B, 0101 = 5, so the result is B5
+
+Saved on: 2025-04-17T17:41:49.966Z
+
+---
+
+","# Hexadecimal Conversions
+Converting hexadecimal to binary: Each hex digit converts to 4 bits
+0 → 0000, 1 → 0001, ..., 9 → 1001, A → 1010, B → 1011, ..., F → 1111
+
+Converting binary to hexadecimal: Group bits into sets of 4, starting from the right, and convert each group to a hex digit.
+
+Example: Binary 1011 0101 to hex: 1011 = B, 0101 = 5, so the result is B5
+
+Saved on: 2025-04-17T17:41:49.966Z
+
+---
+
+"
+computerScience,1,"What is: # Types of Numbers
+Different types of numbers in computing include:
+
+- Integer: A whole number used for counting (e.g., 3, 47)
+- Signed integer: An integer with a sign (e.g., -3, +47)
+- Fraction: Values represented as ratios (e.g., 2/3, 52/17)
+- Mixed numbers: Numbers with whole and fractional parts (e.g., -37.85, 2.83)
+- Exponential notation: Numbers expressed as powers (e.g., 3.6×10⁸, 4.2×10⁻⁹)
+
+Saved on: 2025-04-17T18:35:52.507Z
+
+---
+
+","# Types of Numbers
+Different types of numbers in computing include:
+
+- Integer: A whole number used for counting (e.g., 3, 47)
+- Signed integer: An integer with a sign (e.g., -3, +47)
+- Fraction: Values represented as ratios (e.g., 2/3, 52/17)
+- Mixed numbers: Numbers with whole and fractional parts (e.g., -37.85, 2.83)
+- Exponential notation: Numbers expressed as powers (e.g., 3.6×10⁸, 4.2×10⁻⁹)
+
+Saved on: 2025-04-17T18:35:52.507Z
+
+---
+
+"

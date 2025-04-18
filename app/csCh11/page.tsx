@@ -1,128 +1,39 @@
-"use client";
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import { saveNoteForRevision } from '../utilities/saveNoteForRevision';
+import { VoiceCapture } from '../components/VoiceCapture';
+import { AnsweringChoices } from '../components/AnsweringChoices';
+import { Assessment } from '../components/Assessment';
 
-// Define TypeScript interfaces for our data structure
+// ────────────────────────────────────────────────────────────────────────────────
+// Type definitions (unchanged)
+// ────────────────────────────────────────────────────────────────────────────────
 interface MindmapNode {
   name: string;
-  id: string; // Unique identifier for the node
-  summary?: string; // Optional detailed description
+  id: string;
+  summary?: string;
   children?: MindmapNode[];
 }
 
-// Define the main component
-const CsCh11MindMap: React.FC = () => {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [infoContent, setInfoContent] = useState<string>('');
-  const [activeNode, setActiveNode] = useState<string | null>(null);
-  const [zoom, setZoom] = useState<number>(1);
-  const [hiddenNodes, setHiddenNodes] = useState<Set<string>>(new Set());
-  const [saveStatus, setSaveStatus] = useState<string>('');
-  const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+// ────────────────────────────────────────────────────────────────────────────────
+// Chapter 14 – Programming & Data Representation (detailed version)
+// Summaries reference the Cambridge International AS & A‑Level Computer Science
+// (9618) specification style: Paper 2 – Fundamental Problem‑solving & Programming.
+// ────────────────────────────────────────────────────────────────────────────────
 
-  // Zoom control handlers
-  const handleZoomIn = () => {
-    if (svgRef.current && zoomRef.current) {
-      d3.select(svgRef.current)
-        .transition()
-        .duration(300)
-        .call(zoomRef.current.scaleBy, 1.3);
-    }
-  };
+// app/components/InfoRepresentationQuestions.tsx
 
-  const handleZoomOut = () => {
-    if (svgRef.current && zoomRef.current) {
-      d3.select(svgRef.current)
-        .transition()
-        .duration(300)
-        .call(zoomRef.current.scaleBy, 0.7);
-    }
-  };
 
-  const handleReset = () => {
-    if (svgRef.current && zoomRef.current) {
-      const width = 1200;
-      const height = 800;
-      d3.select(svgRef.current)
-        .transition()
-        .duration(500)
-        .call(
-          zoomRef.current.transform,
-          d3.zoomIdentity.translate(width / 2, height / 2).scale(0.8)
-        );
-    }
-  };
-
-  // Handle hiding/showing nodes
-  const toggleNodeVisibility = () => {
-    if (!activeNode) return;
-    const newHiddenNodes = new Set(hiddenNodes);
-    if (hiddenNodes.has(activeNode)) {
-      newHiddenNodes.delete(activeNode);
-    } else {
-      newHiddenNodes.add(activeNode);
-    }
-    setHiddenNodes(newHiddenNodes);
-    if (svgRef.current) {
-      d3.select(svgRef.current)
-        .selectAll(`text[data-id="${activeNode}"]`)
-        .attr('fill', hiddenNodes.has(activeNode) ? '#2D3748' : null);
-    }
-  };
-
-  // Function to save note for revision
-  const saveNoteForRevision = async () => {
-    if (!activeNode || !infoContent) return;
-    const nodeName = findNodeName(activeNode, data);
-    if (!nodeName) return;
-    try {
-      const timestamp = new Date().toISOString();
-      const noteToSave = `# ${nodeName}\n${infoContent}\n\nSaved on: ${timestamp}\n\n---\n\n`;
-      const response = await fetch('/api/saveNote', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ note: noteToSave }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to save note');
-      }
-      setSaveStatus('Note saved!');
-      setTimeout(() => {
-        setSaveStatus('');
-      }, 3000);
-    } catch (error) {
-      console.error("Error saving note:", error);
-      setSaveStatus('Error saving note');
-      setTimeout(() => {
-        setSaveStatus('');
-      }, 3000);
-    }
-  };
-
-  // Find the name of the active node for the title
-  const findNodeName = (nodeId: string | null, nodeData: MindmapNode): string | null => {
-    if (!nodeId) return null;
-    if (nodeData.id === nodeId) return nodeData.name;
-    if (nodeData.children) {
-      for (const child of nodeData.children) {
-        const found = findNodeName(nodeId, child);
-        if (found) return found;
-      }
-    }
-    return null;
-  };
-
-  // Define the data structure for the mindmap (based on csCh11 markdown)
-  const data: MindmapNode = {
-    name: "Chapter 11: Databases",
-    id: "ch11-root",
-    children: [
-      {
-        name: "Learning Objectives",
-        id: "learning-objectives",
-        summary: `By the end of this chapter you should be able to:
+const data: MindmapNode = {
+  name: "What are the main themes in Chapter 11: Databases?",
+  id: "ch11-root",
+  children: [
+    {
+      name: "What should you be able to do by the end of this chapter?",
+      id: "learning-objectives",
+      summary: `By the end of this chapter you should be able to:
 - Understand limitations of file-based data storage
 - Describe relational database features
 - Use relational database terminology
@@ -130,279 +41,423 @@ const CsCh11MindMap: React.FC = () => {
 - Understand normalization and 3NF
 - Produce normalized database designs
 - Understand DBMS functions, DDL, DML, and SQL usage`
-      },
-      {
-        name: "11.01 File-Based Approach Limitations",
-        id: "file-based-limitations",
-        children: [
-          {
-            name: "Data Integrity Problems",
-            id: "integrity-problems",
-            summary: `Single text file can lead to:
+    },
+    {
+      name: "What limitations arise from a file-based data storage approach?",
+      id: "file-based-limitations",
+      children: [
+        {
+          name: "What data integrity problems can occur with file-based systems?",
+          id: "integrity-problems",
+          summary: `Single text file can lead to:
 - Entry errors (e.g., name order swapped)
 - Missing data (no validation)
 - Duplication and inconsistency`
-          },
-          {
-            name: "Data Privacy Issues",
-            id: "privacy-issues",
-            summary: `File-based systems lack access control:
+        },
+        {
+          name: "What privacy issues do file-based systems present?",
+          id: "privacy-issues",
+          summary: `File-based systems lack access control:
 - Finance and recruitment share sensitive data
 - No partial file permissions`
-          }
-        ]
-      },
-      {
-        name: "11.02 Relational Database Model",
-        id: "relational-model",
-        summary: `Stores data in tables (relations):
+        }
+      ]
+    },
+    {
+      name: "What defines the relational database model in 11.02?",
+      id: "relational-model",
+      summary: `Stores data in tables (relations):
 - Tuples (rows), attributes (columns)
 - Primary keys ensure uniqueness and integrity
 - Atomic values and set semantics
 - Queries instead of file parsing`
-      },
-      {
-        name: "11.03 Entity-Relationship Modelling",
-        id: "er-modelling",
-        children: [
-          {
-            name: "Top-Down Refinement",
-            id: "er-refinement",
-            summary: `Stepwise refinement to choose entities and relationships.`
-          },
-          {
-            name: "Worked Example 11.01",
-            id: "worked-example-11-01",
-            summary: `Model agency booking scenario with entities: Booking, Band, Member, Venue.`
-          },
-          {
-            name: "Question 11.01",
-            id: "question-11-01",
-            summary: `Does a primary key foreign key in Member require uniqueness?`
-          }
-        ]
-      },
-      {
-        name: "11.04 Logical E-R Model",
-        id: "logical-er-model",
-        children: [
-          {
-            name: "Link Entity for M:M",
-            id: "link-entity",
-            summary: `Resolve many-to-many by introducing link entity (e.g., Band-Booking).`
-          },
-          {
-            name: "Extension Question 11.01",
-            id: "extension-question",
-            summary: `Can relationships be annotated with cardinality details?`
-          }
-        ]
-      },
-      {
-        name: "11.05 Normalisation",
-        id: "normalisation",
-        children: [
-          {
-            name: "First Normal Form (1NF)",
-            id: "1nf",
-            summary: `Eliminate repeating groups into separate tables.`
-          },
-          {
-            name: "Second Normal Form (2NF)",
-            id: "2nf",
-            summary: `Remove partial dependencies; split tables as needed.`
-          },
-          {
-            name: "Third Normal Form (3NF)",
-            id: "3nf",
-            summary: `Remove transitive dependencies; finalize table designs.`
-          }
-        ]
-      },
-      {
-        name: "11.06 Database Management System (DBMS)",
-        id: "dbms",
-        children: [
-          {
-            name: "ANSI Three-Level Architecture",
-            id: "ansi-architecture",
-            summary: `External, conceptual, and internal levels of DBMS architecture.`
-          },
-          {
-            name: "DBMS Features & Tools",
-            id: "dbms-tools",
-            summary: `Access control, integrity constraints, DDL and DML operations using SQL.`
-          }
-        ]
-      }
-    ]
+    },
+    {
+      name: "How is entity‑relationship modelling performed in 11.03?",
+      id: "er-modelling",
+      children: [
+        {
+          name: "What is the top‑down refinement process when creating an E‑R diagram?",
+          id: "er-refinement",
+          summary: `Stepwise refinement to choose entities and relationships.`
+        },
+        {
+          name: "How do you model the agency booking scenario in Worked Example 11.01?",
+          id: "worked-example-11-01",
+          summary: `Model agency booking scenario with entities: Booking, Band, Member, Venue.`
+        },
+        {
+          name: "Does a primary key used as a foreign key in Member require uniqueness?",
+          id: "question-11-01",
+          summary: `Does a primary key foreign key in Member require uniqueness?`
+        }
+      ]
+    },
+    {
+      name: "How do you build a logical E‑R model in 11.04?",
+      id: "logical-er-model",
+      children: [
+        {
+          name: "How is a many‑to‑many relationship resolved using a link entity?",
+          id: "link-entity",
+          summary: `Resolve many-to-many by introducing link entity (e.g., Band-Booking).`
+        },
+        {
+          name: "Can relationships in an ER model be annotated with cardinality details?",
+          id: "extension-question",
+          summary: `Can relationships be annotated with cardinality details?`
+        }
+      ]
+    },
+    {
+      name: "What stages of normalization are covered in 11.05?",
+      id: "normalisation",
+      children: [
+        {
+          name: "What does First Normal Form require and how do you eliminate repeating groups?",
+          id: "1nf",
+          summary: `Eliminate repeating groups into separate tables.`
+        },
+        {
+          name: "What does Second Normal Form require and how do you remove partial dependencies?",
+          id: "2nf",
+          summary: `Remove partial dependencies; split tables as needed.`
+        },
+        {
+          name: "What does Third Normal Form require and how do you remove transitive dependencies?",
+          id: "3nf",
+          summary: `Remove transitive dependencies; finalize table designs.`
+        }
+      ]
+    },
+    {
+      name: "What are the DBMS architecture and tools in 11.06?",
+      id: "dbms",
+      children: [
+        {
+          name: "What are the three levels of the ANSI DBMS architecture?",
+          id: "ansi-architecture",
+          summary: `External, conceptual, and internal levels of DBMS architecture.`
+        },
+        {
+          name: "What features and tools does a DBMS provide using SQL?",
+          id: "dbms-tools",
+          summary: `Access control, integrity constraints, DDL and DML operations using SQL.`
+        }
+      ]
+    }
+  ]
+};
+
+// ────────────────────────────────────────────────────────────────────────────────
+// Component logic – identical to the earlier template (omitted comments for brevity)
+// ────────────────────────────────────────────────────────────────────────────────
+const CsCh11MindMap: React.FC = () => {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [infoContent, setInfoContent] = useState<string>('');
+  const [activeNode, setActiveNode] = useState<string | null>(null);
+  const [zoom, setZoom] = useState<number>(1);
+  const [hiddenNodes, setHiddenNodes] = useState<Set<string>>(new Set());
+  const [saveStatus, setSaveStatus] = useState<string>('');
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+
+  type PanelMode = 'choice' | 'answer' | 'recording' | 'feedback';
+
+  const [panelMode, setPanelMode] = useState<PanelMode>('choice');
+  const [transcript, setTranscript] = useState<string>('');
+
+
+  const handleZoomIn = () => {
+    if (svgRef.current && zoomRef.current) d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 1.3);
+  };
+  const handleZoomOut = () => {
+    if (svgRef.current && zoomRef.current) d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 0.7);
+  };
+  const handleReset = () => {
+    if (svgRef.current && zoomRef.current) {
+      const w = 1200, h = 800;
+      d3.select(svgRef.current).transition().duration(500).call(zoomRef.current.transform, d3.zoomIdentity.translate(w / 2, h / 2).scale(0.8));
+    }
   };
 
-  const activeNodeName = findNodeName(activeNode, data);
+  const toggleNodeVisibility = () => {
+    if (!activeNode) return;
+    const n = new Set(hiddenNodes);
+    n.has(activeNode) ? n.delete(activeNode) : n.add(activeNode);
+    setHiddenNodes(n);
+    if (svgRef.current) d3.select(svgRef.current).selectAll(`text[data-id="${activeNode}"]`).attr('fill', hiddenNodes.has(activeNode) ? '#2D3748' : null);
+  };
+
+  const findName = (id: string | null, node: MindmapNode): string | null => {
+    if (!id) return null;
+    if (node.id === id) return node.name;
+    if (node.children) for (const c of node.children) { const f = findName(id, c); if (f) return f; }
+    return null;
+  };
+  const activeNodeName = findName(activeNode, data);
   const isNodeHidden = activeNode ? hiddenNodes.has(activeNode) : false;
 
-  // Use effect hook for D3 logic
+  const selectNode = (d: d3.HierarchyPointNode<MindmapNode>) => {
+    setActiveNode(d.data.id);
+    setInfoContent(d.data.summary || `${d.data.name} – No summary yet.`);
+    setSaveStatus('');
+    setPanelMode('choice');
+  };
+  
+
   useEffect(() => {
     if (!svgRef.current) return;
-    const width = 1200;
-    const height = 800;
-    const radius = Math.min(width, height) / 2 * 0.9;
+  
+    /* ────────── SVG scaffold ────────── */
+    const width = 1200, height = 800,
+          radius = Math.min(width, height) / 2 * 0.9;
+  
     const svg = d3.select(svgRef.current)
-      .attr('width', width)
+      .attr('width',  width)
       .attr('height', height)
       .attr('viewBox', [-width / 2, -height / 2, width, height])
       .style('font', '10px sans-serif');
-    svg.selectAll("*").remove();
+  
+    svg.selectAll('*').remove();
     const g = svg.append('g');
-    const treeLayout = d3.tree<MindmapNode>()
-      .size([2 * Math.PI, radius])
-      .separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth);
+  
+    /* stop the default context‑menu that pops up on two‑finger click */
+    svg.on('contextmenu', e => e.preventDefault());
+  
+    /* ────────── radial tree layout ────────── */
     const root = d3.hierarchy(data);
-    const treeData = treeLayout(root);
-    g.append("g")
-      .attr("fill", "none")
-      .attr("stroke", "#ccc")
-      .attr("stroke-opacity", 0.7)
-      .attr("stroke-width", 1.5)
-      .selectAll("path")
+    const treeData = d3.tree<MindmapNode>()
+      .size([2 * Math.PI, radius])
+      .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth)(root);
+  
+    const linkGen = d3.linkRadial<
+      d3.HierarchyPointLink<MindmapNode>,
+      d3.HierarchyPointNode<MindmapNode>>()
+        .angle(d => d.x)
+        .radius(d => d.y);
+  
+    const linkGroup = g.append('g')
+      .attr('fill', 'none')
+      .attr('stroke', '#ccc')
+      .attr('stroke-opacity', 0.7)
+      .attr('stroke-width', 1.5)
+      .selectAll('path')
       .data(treeData.links())
-      .join("path")
-      .attr("d", d3.linkRadial<any, d3.HierarchyPointNode<MindmapNode>>()
-        .angle(node => node.x)
-        .radius(node => node.y));
-    const colorScale = d3.scaleOrdinal<string, string>()
-      .domain(["0", "1", "2", "3", "4"])
-      .range(["#4299E1", "#48BB78", "#F6AD55", "#F56565", "#9F7AEA"]);
-    const node = g.append("g")
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-width", 3)
-      .selectAll("g")
+      .join('path')
+      .attr('d', linkGen);
+  
+    /* ────────── nodes (group, circle, label) ────────── */
+    const colour = d3.scaleOrdinal<string>()
+      .domain(['0','1','2','3','4'])
+      .range(['#4299E1','#48BB78','#F6AD55','#F56565','#9F7AEA']);
+  
+    const node = g.append('g')
+      .attr('stroke-linejoin', 'round')
+      .attr('stroke-width', 3)
+      .selectAll<SVGGElement, d3.HierarchyPointNode<MindmapNode>>('g')
       .data(treeData.descendants())
-      .join("g")
-      .attr("transform", d => `rotate(${(d.x * 180 / Math.PI - 90)}) translate(${d.y},0)`)
-      .attr("data-id", d => d.data.id);
-    node.append("circle")
-      .attr("fill", (d: any) => colorScale(d.depth.toString()))
-      .attr("r", d => d.data.id === "ch11-root" ? 10 : 6)
-      .style("cursor", "pointer")
-      .on("click", (event: MouseEvent, d: any) => {
-        setActiveNode(d.data.id);
-        setInfoContent(d.data.summary || `${d.data.name} - No summary available.`);
-        setSaveStatus('');
+      .join('g')
+      .attr('data-id', d => d.data.id)
+      .attr('transform', d =>
+        `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
+  
+    /* circle */
+    node.append('circle')
+      .attr('fill', d => colour(d.depth.toString()))
+      .attr('r', d => d.data.id === 'chapter-14' ? 10 : 6)
+      .style('cursor', 'pointer')
+      .on('mouseover', (e, d) =>
+        d3.select(e.currentTarget).attr('r',
+          d.data.id === 'chapter-14' ? 12 : 8).attr('stroke', 'black'))
+      .on('mouseout', (e, d) =>
+        d3.select(e.currentTarget).attr('r',
+          d.data.id === 'chapter-14' ? 10 : 6).attr('stroke', null));
+  
+    /* label */
+    node.append('text')
+      .attr('dy', '0.31em')
+      .style('font-size', '10px')
+      .style('font-weight', 'bold')
+      .style('pointer-events', 'none')
+      .attr('text-anchor', d => d.x < Math.PI ? 'start' : 'end')
+      .attr('fill', d =>
+        hiddenNodes.has(d.data.id) ? '#2D3748' : colour(d.depth.toString()))
+      .attr('transform', d => {
+        const inv = -(d.x * 180 / Math.PI - 90);
+        const h   = d.x < Math.PI ? 8 : -8;
+        return `rotate(${inv}) translate(${h},0)`;
       })
-      .on("mouseover", (event: MouseEvent, d: any) => {
-        d3.select(event.currentTarget as SVGCircleElement)
-          .attr('r', (d: any) => d.data.id === 'ch11-root' ? 12 : 8)
-          .attr('stroke', 'black');
+      .text(d => d.data.name);
+  
+    /* ────────── drag (only if two‑finger/right click) ────────── */
+    const dragBehaviour = d3
+      .drag<SVGGElement, d3.HierarchyPointNode<MindmapNode>>()
+      /*  filter keeps left‑clicks for opening, right‑clicks for drag  */
+      .filter(event => event.button === 2 || event.buttons === 2)
+      .on('start', function (event, d) {
+        event.sourceEvent.stopPropagation();       // keep zoom idle
+        event.defaultPrevented = true;             // suppress click later
+        d3.select(this).raise();
+  
+        syncToPointer(event, d);
+        moveNode(this, d);
+        linkGroup.attr('d', linkGen);
       })
-      .on("mouseout", (event: MouseEvent, d: any) => {
-        d3.select(event.currentTarget as SVGCircleElement)
-          .attr('r', (d: any) => d.data.id === 'ch11-root' ? 10 : 6)
-          .attr('stroke', null);
+      .on('drag', function (event, d) {
+        syncToPointer(event, d);
+        moveNode(this, d);
+        linkGroup.attr('d', linkGen);
       });
-    node.append("text")
-      .attr("data-id", d => d.data.id)
-      .attr("transform", (d: any) => {
-        const inverseRotation = -(d.x * 180 / Math.PI - 90);
-        const horizontalOffset = d.x < Math.PI ? 8 : -8;
-        return `rotate(${inverseRotation}) translate(${horizontalOffset}, 0)`;
-      })
-      .attr("dy", "0.31em")
-      .attr("text-anchor", (d: any) => d.x < Math.PI ? "start" : "end")
-      .attr("fill", (d: any) => hiddenNodes.has(d.data.id) ? "#2D3748" : colorScale(d.depth.toString()))
-      .style("font-size", "10px")
-      .style("font-weight", "bold")
-      .style("pointer-events", "none")
-      .text((d: any) => d.data.name);
-    if (!activeNode) {
-      setInfoContent("Click on any node to see detailed information about that topic from Chapter 11.");
-    }
-    const zoomBehavior = d3.zoom<SVGSVGElement, unknown>()
+  
+    node.call(dragBehaviour);               // ① drag attached first
+  
+    /* click attached AFTER drag so defaultPrevented check works */
+    node.on('click', (event, d) => {
+      if (event.defaultPrevented) return;   // ignore right‑drag sequence
+  
+      setActiveNode(d.data.id);
+      setInfoContent(d.data.summary || `${d.data.name} – No summary yet.`);
+      setSaveStatus('');
+      setPanelMode('choice');
+    });
+  
+    /* ────────── zoom / pan ────────── */
+    const zoomer = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.3, 3])
-      .on("zoom", (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
-        g.attr("transform", event.transform.toString());
-        setZoom(event.transform.k);
+      .on('zoom', ev => {
+        g.attr('transform', ev.transform.toString());
+        setZoom(ev.transform.k);
       });
-    zoomRef.current = zoomBehavior;
-    svg.call(zoomBehavior)
-      .on("dblclick.zoom", null);
-    const initialTransform = d3.zoomIdentity.translate(0, 0).scale(0.8);
-    svg.call(zoomBehavior.transform, initialTransform);
-    return () => {
-      if (svgRef.current) {
-        svg.on('.zoom', null);
-      }
-    };
+  
+    zoomRef.current = zoomer;
+    svg.call(zoomer).on('dblclick.zoom', null);
+    svg.call(zoomer.transform, d3.zoomIdentity.translate(0, 0).scale(0.8));
+  
+    if (!activeNode) {
+      setInfoContent('Click on any node for full exam‑ready notes.');
+    }
+  
+    return () => { svg.on('.zoom', null); };
+  
+    /* ─── helpers ───────────────────────────────────────── */
+    function syncToPointer(event: any, d: d3.HierarchyPointNode<MindmapNode>) {
+      const t           = d3.zoomTransform(svgRef.current as SVGSVGElement);
+      const [ux, uy]    = t.invert([event.x, event.y]);
+      let angle         = Math.atan2(uy, ux) + Math.PI / 2;
+      if (angle < 0) angle += 2 * Math.PI;
+      d.x = angle;
+      d.y = Math.hypot(ux, uy);
+    }
+    function moveNode(el: SVGGElement, d: d3.HierarchyPointNode<MindmapNode>) {
+      d3.select(el)
+        .attr('transform',
+          `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
+  
+      const inv = -(d.x * 180 / Math.PI - 90);
+      const h   = d.x < Math.PI ? 8 : -8;
+      d3.select(el).select('text')
+        .attr('transform', `rotate(${inv}) translate(${h},0)`)
+        .attr('text-anchor', d.x < Math.PI ? 'start' : 'end');
+    }
   }, [hiddenNodes]);
+    // dependencies stay unchanged
+  
+  
 
   return (
     <div className="flex flex-col w-full h-screen bg-gray-800 text-white">
       <div className="p-2 bg-gray-700 text-center sticky top-0 z-10">
-        <h1 className="text-xl font-semibold">Chapter 11: Databases</h1>
+        <h1 className="text-xl font-semibold">Topic 14: Programming &amp; Data Representation</h1>
       </div>
+
       <div className="flex-grow flex flex-col md:flex-row overflow-hidden">
-        {/* Mindmap Area */}
         <div className="w-full md:w-2/3 h-2/3 md:h-full overflow-hidden relative bg-gray-900">
-          <svg ref={svgRef} className="w-full h-full"></svg>
+          <svg ref={svgRef} className="w-full h-full" />
           <div className="absolute bottom-4 right-4 bg-gray-800 rounded-lg shadow-lg p-2 flex flex-col space-y-2">
-            <button
-              onClick={handleZoomIn}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center"
-              aria-label="Zoom in"
-            >
-              <span className="text-xl">+</span>
-            </button>
-            <button
-              onClick={handleZoomOut}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center"
-              aria-label="Zoom out"
-            >
-              <span className="text-xl">-</span>
-            </button>
-            <button
-              onClick={handleReset}
-              className="bg-gray-600 hover:bg-gray-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center"
-              aria-label="Reset zoom"
-            >
-              <span className="text-sm">Reset</span>
-            </button>
+            <button onClick={handleZoomIn} className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center" aria-label="Zoom in"><span className="text-xl">+</span></button>
+            <button onClick={handleZoomOut} className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center" aria-label="Zoom out"><span className="text-xl">−</span></button>
+            <button onClick={handleReset} className="bg-gray-600 hover:bg-gray-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center" aria-label="Reset zoom"><span className="text-sm">Reset</span></button>
           </div>
         </div>
-        {/* Information Panel */}
+
         <div className="w-full md:w-1/3 h-1/3 md:h-full p-4 bg-gray-700 overflow-y-auto border-t md:border-t-0 md:border-l border-gray-600">
           <div className="bg-gray-800 rounded-lg shadow p-4">
             <h2 className="text-lg font-semibold mb-2">
-              {activeNodeName || "Topic Information"}
-              {isNodeHidden && <span className="text-sm text-gray-400 ml-2">(Hidden)</span>}
+              {activeNodeName || 'Topic Information'} {isNodeHidden && <span className="text-sm text-gray-400 ml-2">(Hidden)</span>}
             </h2>
+
             <div className="prose prose-invert max-w-none text-gray-300 whitespace-pre-line mb-4">
-              {infoContent ? (
-                <p>{infoContent}</p>
-              ) : (
-                <p>Click on a node in the mindmap to see detailed information about that topic from Chapter 11.</p>
-              )}
+             {activeNode && panelMode === 'choice' && (
+  <AnsweringChoices
+    onShowAnswer={() => setPanelMode('answer')}
+    onTryAnswer={() => setPanelMode('recording')}
+  />
+)}
+
+{panelMode === 'recording' && (
+  <VoiceCapture onFinished={async (base64) => {
+    const res = await fetch('/api/speechToText', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ audioBase64: base64 })
+    });
+    const { text } = await res.json();
+    setTranscript(text);
+    setPanelMode('feedback');          // triggers <Assessment>
+  }} />
+)}
+
+{panelMode === 'answer' && <p className="whitespace-pre-wrap">{infoContent}</p>}
+
+{panelMode === 'feedback' && (
+  <div className="prose prose-invert text-gray-300 whitespace-pre-line mb-4">
+    <h3 className="text-lg font-semibold mb-1">Transcribed Answer:</h3>
+    <p>{transcript}</p>
+  </div>
+)}
+{panelMode === 'feedback' && (
+  <>
+    <Assessment
+      transcript={transcript}
+      modelAnswer={infoContent}
+      question={activeNodeName ?? ''}
+    />
+    <p className="whitespace-pre-wrap mt-4">{infoContent}</p>
+  </>
+)}
             </div>
-            {saveStatus && (
-              <div className="mb-4 p-2 bg-green-600 text-white rounded-md text-center">
-                {saveStatus}
-              </div>
-            )}
-            {activeNode && (
+
+            {saveStatus && <div className="mb-4 p-2 bg-green-600 text-white rounded-md text-center">{saveStatus}</div>}
+
+            {activeNode && (panelMode === 'answer' || panelMode === 'feedback') && (
               <div className="space-y-2">
+                {/* "I know this very well" button */}
                 <button
                   onClick={toggleNodeVisibility}
                   className={`px-4 py-2 rounded-md font-medium w-full ${
                     isNodeHidden
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : "bg-green-600 hover:bg-green-700 text-white"
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                      : 'bg-green-600 hover:bg-green-700 text-white'
                   }`}
                 >
                   {isNodeHidden
-                    ? "I need to review this, show it"
-                    : "I know this very well, hide it"}
+                    ? 'I need to review this, show it'
+                    : 'I know this very well, hide it'}
                 </button>
+
+                {/* "I need to revise this later" button */}
                 <button
-                  onClick={saveNoteForRevision}
+                  onClick={() =>
+                    saveNoteForRevision(
+                      activeNodeName,
+                      infoContent,
+                      'computerScience',
+                      11,
+                      setSaveStatus,
+                      setIsSaving
+                    )
+                  }
                   className="px-4 py-2 rounded-md font-medium w-full bg-red-600 hover:bg-red-700 text-white"
                 >
                   I need to revise this later, save it

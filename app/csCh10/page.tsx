@@ -1,451 +1,656 @@
-"use client";
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import { saveNoteForRevision } from '../utilities/saveNoteForRevision';
+import { VoiceCapture } from '../components/VoiceCapture';
+import { AnsweringChoices } from '../components/AnsweringChoices';
+import { Assessment } from '../components/Assessment';
 
-// Define TypeScript interfaces for our data structure
+// ────────────────────────────────────────────────────────────────────────────────
+// Type definitions (unchanged)
+// ────────────────────────────────────────────────────────────────────────────────
 interface MindmapNode {
   name: string;
-  id: string; // Unique identifier for the node
-  summary?: string; // Optional detailed description
+  id: string;
+  summary?: string;
   children?: MindmapNode[];
 }
 
-// Define the main component
-const CsCh10MindMap: React.FC = () => {
+// ────────────────────────────────────────────────────────────────────────────────
+// Chapter 14 – Programming & Data Representation (detailed version)
+// Summaries reference the Cambridge International AS & A‑Level Computer Science
+// (9618) specification style: Paper 2 – Fundamental Problem‑solving & Programming.
+// ────────────────────────────────────────────────────────────────────────────────
+
+// app/components/InfoRepresentationQuestions.tsx
+
+
+const data: MindmapNode = {
+  name: "What are the main themes covered in Chapter 10: Ethics, Copyright, Licensing, and AI?",
+  id: "ch10-root",
+  children: [
+    {
+      name: "What skills and understandings should you have by the end of this chapter?",
+      id: "learning-objectives",
+      summary: `By the end of this chapter you should be able to:
+- show understanding of the need for and purpose of ethics as a computing professional
+- show understanding of the need to act ethically and the impact of acting ethically or unethically for a given situation
+- show understanding of the need for copyright legislation
+- show understanding of the different types of software licencing and justify the use of a licence for a given situation
+- show understanding of Artificial Intelligence (AI)`
+    },
+    {
+      name: "What foundational definitions and viewpoints are presented in section 10.01 Ethics?",
+      id: "ethics",
+      children: [
+        {
+          name: "How is 'ethics' defined in different contexts?",
+          id: "ethics-definitions",
+          summary: `- Ethics is the field of moral science.
+- Ethics are the moral principles by which any person is guided.
+- Ethics are the rules of conduct recognised in a particular profession or area of human life.`
+        },
+        {
+          name: "What viewpoints underpin moral principles in ethics?",
+          id: "ethics-viewpoints",
+          summary: `Moral principles concern right or wrong. Viewpoints: philosophical, religious, legal, pragmatic.`
+        },
+        {
+          name: "What foundations inform rules of conduct in computing?",
+          id: "ethics-foundation",
+          summary: `Philosophical views of right and wrong and pragmatic views of what is common sense form the foundation for rules of conduct in computing.`
+        }
+      ]
+    },
+    {
+      name: "Which professional bodies and codes guide computing professionals in 10.02?",
+      id: "computing-professional",
+      children: [
+        {
+          name: "What are the main sections of the BCS Code of Conduct?",
+          id: "prof-org",
+          children: [
+            {
+              name: "What does the BCS Code say about acting in the public interest?",
+              id: "bcs-public-interest"
+            },
+            {
+              name: "How does the BCS Code define professional competence and integrity?",
+              id: "bcs-competence"
+            },
+            {
+              name: "What duty to relevant authority is outlined by the BCS Code?",
+              id: "bcs-duty-authority"
+            },
+            {
+              name: "What responsibilities to the profession does the BCS Code impose?",
+              id: "bcs-duty-profession"
+            }
+          ]
+        },
+        {
+          name: "What principles are set out by the IEEE‑CS/ACM Joint Task Force?",
+          id: "ieee-acm-principles",
+          children: [
+            {
+              name: "How should computing professionals act in the public interest?",
+              id: "ieee-principle1",
+              summary: "Act consistently with the public interest."
+            },
+            {
+              name: "What guidance is given for acting for clients and employers?",
+              id: "ieee-principle2",
+              summary: "Act in best interests of client and employer consistent with public interest."
+            },
+            {
+              name: "What standard must products meet according to IEEE/ACM?",
+              id: "ieee-principle3",
+              summary: "Ensure products meet highest professional standards."
+            },
+            {
+              name: "How should professionals maintain their judgment?",
+              id: "ieee-principle4",
+              summary: "Maintain integrity and independence in professional judgement."
+            },
+            {
+              name: "What ethical approach to management is promoted?",
+              id: "ieee-principle5",
+              summary: "Promote an ethical approach to management."
+            },
+            {
+              name: "How can professionals advance the reputation of the profession?",
+              id: "ieee-principle6",
+              summary: "Advance integrity and reputation of the profession."
+            },
+            {
+              name: "What responsibilities do professionals have towards colleagues?",
+              id: "ieee-principle7",
+              summary: "Be fair to and supportive of colleagues."
+            },
+            {
+              name: "How should professionals engage in lifelong learning?",
+              id: "ieee-principle8",
+              summary: "Participate in lifelong learning and promote ethical practice."
+            }
+          ]
+        },
+        {
+          name: "How do the worked examples illustrate ethical decision‑making?",
+          id: "worked-example",
+          children: [
+            {
+              name: "What happened in Scenario 1 when the manager was challenged?",
+              id: "scenario1",
+              summary: "Challenge the manager; decision reversed; fully-tested product."
+            },
+            {
+              name: "What was the outcome in Scenario 2?",
+              id: "scenario2",
+              summary: "Challenge the manager; protests ignored."
+            },
+            {
+              name: "What occurred in Scenario 3 without a challenge?",
+              id: "scenario3",
+              summary: "No challenge; errors addressed via maintenance."
+            },
+            {
+              name: "What did the engineer plan in Scenario 4?",
+              id: "scenario4",
+              summary: "Intend to raise matter later when errors evident."
+            }
+          ]
+        },
+        {
+          name: "Why is documentation emphasized in professional codes?",
+          id: "discussion-10-01",
+          summary: `Search the eight principles for documentation mentions and discuss why documentation is emphasised so often.`
+        }
+      ]
+    },
+    {
+      name: "What defines the public good in computing ethics (10.03)?",
+      id: "public-good",
+      children: [
+        {
+          name: "Which concepts illustrate the public good?",
+          id: "public-good-concepts",
+          summary: `References to health, safety, welfare of the public, public interest, good, concern.`
+        },
+        {
+          name: "What real‑world failures highlight public good concerns?",
+          id: "public-good-examples",
+          children: [
+            {
+              name: "What caused the Ariane 5 Rocket disaster?",
+              id: "ariane5",
+              summary: "Explosion due to 64-bit to 16-bit conversion overflow; ~$500M lost."
+            },
+            {
+              name: "How did unit mismatch lead to the Mars Climate Orbiter loss?",
+              id: "mars-orbiter",
+              summary: "Unit mismatch (imperial vs SI); ~$125M lost."
+            },
+            {
+              name: "Why was the NHS IT Programme scrapped?",
+              id: "nhs-it",
+              summary: "Scrapped in 2011; £12B spent vs <£3B initial estimate."
+            }
+          ]
+        },
+        {
+          name: "What discussion points arise from these public good cases?",
+          id: "discussion-10-03",
+          summary: `Search individual cases and consider justified actions for the public good.`
+        }
+      ]
+    },
+    {
+      name: "What key concepts govern ownership and copyright (10.04)?",
+      id: "copyright",
+      children: [
+        {
+          name: "How is copyright formally defined?",
+          id: "copyright-definition",
+          summary: `Formal recognition of ownership; cannot apply to ideas; organisational exceptions.`
+        },
+        {
+          name: "What works are protected by copyright?",
+          id: "copyright-can",
+          summary: `Literary, musical, film, recording, broadcast, art, computer programs.`
+        },
+        {
+          name: "Why is copyright justified?",
+          id: "copyright-justification",
+          summary: `Time, effort, originality; fairness against unauthorized reproduction.`
+        },
+        {
+          name: "What typical laws govern copyright?",
+          id: "copyright-laws",
+          summary: `Registration, duration, post-mortem policy, symbol usage.`
+        },
+        {
+          name: "What implications arise from copyright law?",
+          id: "copyright-implications",
+          summary: `Usage permissions; ACM code example; library photocopy rights.`
+        }
+      ]
+    },
+    {
+      name: "What types of software licensing are covered in 10.05?",
+      id: "software-licensing",
+      children: [
+        {
+          name: "What defines commercial software licensing?",
+          id: "licensing-commercial",
+          summary: `Vendor retains ownership; license defines terms; purchase options; shareware vs freeware; examples.`
+        },
+        {
+          name: "How do open and free licensing models differ?",
+          id: "licensing-open",
+          summary: `OSI vs Free Software Foundation philosophies; copyleft; user freedoms; examples.`
+        },
+        {
+          name: "What research task explores open‑licence software?",
+          id: "task-10-01",
+          summary: `Carry out a search to investigate software under an open licence.`
+        }
+      ]
+    },
+    {
+      name: "What are the main areas of AI discussed in 10.06?",
+      id: "ai",
+      children: [
+        {
+          name: "How is AI defined and scoped?",
+          id: "ai-overview",
+          summary: `Interdisciplinary definition: performing tasks associated with human intelligence.`
+        },
+        {
+          name: "What examples illustrate AI problem solving?",
+          id: "ai-problem-solving",
+          summary: `Chess systems; expert systems for diagnosis; limited creativity.`
+        },
+        {
+          name: "How does AI apply to linguistics?",
+          id: "ai-linguistics",
+          summary: `Voice recognition/synthesis; automated help lines.`
+        },
+        {
+          name: "What are key AI perception applications?",
+          id: "ai-perception",
+          summary: `Industrial robots; autonomous robots; driverless car parking examples.`
+        },
+        {
+          name: "How is reasoning implemented in AI?",
+          id: "ai-reasoning",
+          summary: `Theorem proving; software verification against specs.`
+        },
+        {
+          name: "What role does learning play in AI?",
+          id: "ai-learning",
+          summary: `Machine learning from large datasets; recommendation engines; spam filters.`
+        },
+        {
+          name: "What impacts of AI are addressed?",
+          id: "ai-impact",
+          children: [
+            {
+              name: "What data and privacy concerns does AI raise?",
+              id: "ai-impact-data",
+              summary: `Mass data collection; risk of misuse.`
+            },
+            {
+              name: "How does AI affect employment?",
+              id: "ai-impact-employment",
+              summary: `Automation impacts jobs; leisure vs job loss debate.`
+            },
+            {
+              name: "What issues arise from autonomous AI systems?",
+              id: "ai-impact-autonomous",
+              summary: `Robot deployment in hazardous environments; environmental impact of manufacturing/disposal.`
+            },
+            {
+              name: "What are the implications of AI in healthcare?",
+              id: "ai-impact-healthcare",
+              summary: `Expert systems aid doctors; implications if replaced by AI.`
+            }
+          ]
+        },
+        {
+          name: "What recent AI developments should be discussed?",
+          id: "discussion-ai",
+          summary: `Have you seen recent developments in AI?`
+        },
+        {
+          name: "How can youth engage with professional CS organisations?",
+          id: "reflection-ai",
+          summary: `Is there a professional CS organisation in your country? Encourage youth involvement?`
+        },
+        {
+          name: "What are the chapter’s key takeaways?",
+          id: "summary",
+          summary: `- Definitions of ethics
+- Professional conduct codes
+- Software disasters and ethics
+- Copyright principles
+- Licensing models
+- AI focus on autonomy and learning`
+        }
+      ]
+    }
+  ]
+};
+
+// ────────────────────────────────────────────────────────────────────────────────
+// Component logic – identical to the earlier template (omitted comments for brevity)
+// ────────────────────────────────────────────────────────────────────────────────
+const ChapterTenMindMap: React.FC = () => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [infoContent, setInfoContent] = useState<string>('');
   const [activeNode, setActiveNode] = useState<string | null>(null);
   const [zoom, setZoom] = useState<number>(1);
   const [hiddenNodes, setHiddenNodes] = useState<Set<string>>(new Set());
   const [saveStatus, setSaveStatus] = useState<string>('');
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
 
-  // Zoom control handlers
+  type PanelMode = 'choice' | 'answer' | 'recording' | 'feedback';
+
+  const [panelMode, setPanelMode] = useState<PanelMode>('choice');
+  const [transcript, setTranscript] = useState<string>('');
+
+
   const handleZoomIn = () => {
-    if (svgRef.current && zoomRef.current) {
-      d3.select(svgRef.current)
-        .transition()
-        .duration(300)
-        .call(zoomRef.current.scaleBy, 1.3);
-    }
+    if (svgRef.current && zoomRef.current) d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 1.3);
   };
-
   const handleZoomOut = () => {
-    if (svgRef.current && zoomRef.current) {
-      d3.select(svgRef.current)
-        .transition()
-        .duration(300)
-        .call(zoomRef.current.scaleBy, 0.7);
-    }
+    if (svgRef.current && zoomRef.current) d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 0.7);
   };
-
   const handleReset = () => {
     if (svgRef.current && zoomRef.current) {
-      const width = 1200;
-      const height = 800;
-      d3.select(svgRef.current)
-        .transition()
-        .duration(500)
-        .call(
-          zoomRef.current.transform,
-          d3.zoomIdentity.translate(width / 2, height / 2).scale(0.8)
-        );
+      const w = 1200, h = 800;
+      d3.select(svgRef.current).transition().duration(500).call(zoomRef.current.transform, d3.zoomIdentity.translate(w / 2, h / 2).scale(0.8));
     }
   };
 
-  // Handle hiding/showing nodes
   const toggleNodeVisibility = () => {
     if (!activeNode) return;
-    const newHiddenNodes = new Set(hiddenNodes);
-    if (hiddenNodes.has(activeNode)) {
-      newHiddenNodes.delete(activeNode);
-    } else {
-      newHiddenNodes.add(activeNode);
-    }
-    setHiddenNodes(newHiddenNodes);
-    if (svgRef.current) {
-      d3.select(svgRef.current)
-        .selectAll(`text[data-id="${activeNode}"]`)
-        .attr('fill', hiddenNodes.has(activeNode) ? '#2D3748' : null);
-    }
+    const n = new Set(hiddenNodes);
+    n.has(activeNode) ? n.delete(activeNode) : n.add(activeNode);
+    setHiddenNodes(n);
+    if (svgRef.current) d3.select(svgRef.current).selectAll(`text[data-id="${activeNode}"]`).attr('fill', hiddenNodes.has(activeNode) ? '#2D3748' : null);
   };
 
-  // Function to save note for revision
-  const saveNoteForRevision = async () => {
-    if (!activeNode || !infoContent) return;
-    const nodeName = findNodeName(activeNode, data);
-    if (!nodeName) return;
-    try {
-      const timestamp = new Date().toISOString();
-      const noteToSave = `# ${nodeName}\n${infoContent}\n\nSaved on: ${timestamp}\n\n---\n\n`;
-      const response = await fetch('/api/saveNote', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ note: noteToSave }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to save note');
-      }
-      setSaveStatus('Note saved!');
-      setTimeout(() => {
-        setSaveStatus('');
-      }, 3000);
-    } catch (error) {
-      console.error("Error saving note:", error);
-      setSaveStatus('Error saving note');
-      setTimeout(() => {
-        setSaveStatus('');
-      }, 3000);
-    }
-  };
-
-  // Find the name of the active node for the title
-  const findNodeName = (nodeId: string | null, nodeData: MindmapNode): string | null => {
-    if (!nodeId) return null;
-    if (nodeData.id === nodeId) return nodeData.name;
-    if (nodeData.children) {
-      for (const child of nodeData.children) {
-        const found = findNodeName(nodeId, child);
-        if (found) return found;
-      }
-    }
+  const findName = (id: string | null, node: MindmapNode): string | null => {
+    if (!id) return null;
+    if (node.id === id) return node.name;
+    if (node.children) for (const c of node.children) { const f = findName(id, c); if (f) return f; }
     return null;
   };
-
-  // Define the data structure for the mindmap (based on csCh10 markdown)
-  const data: MindmapNode = {
-    name: "Chapter 10: Ethics, Copyright, Licensing, and AI",
-    id: "ch10-root",
-    children: [
-      {
-        name: "Learning Objectives",
-        id: "learning-objectives",
-        summary: `By the end of this chapter you should be able to:
-- show understanding of the need for and purpose of ethics as a computing professional
-- show understanding of the need to act ethically and the impact of acting ethically or unethically for a given situation
-- show understanding of the need for copyright legislation
-- show understanding of the different types of software licencing and justify the use of a licence for a given situation
-- show understanding of Artificial Intelligence (AI)`
-      },
-      {
-        name: "10.01 Ethics",
-        id: "ethics",
-        children: [
-          {
-            name: "Definitions",
-            id: "ethics-definitions",
-            summary: `- Ethics is the field of moral science.
-- Ethics are the moral principles by which any person is guided.
-- Ethics are the rules of conduct recognised in a particular profession or area of human life.`
-          },
-          {
-            name: "Moral Principles Viewpoints",
-            id: "ethics-viewpoints",
-            summary: `Moral principles concern right or wrong. Viewpoints: philosophical, religious, legal, pragmatic.`
-          },
-          {
-            name: "Foundation for Rules of Conduct",
-            id: "ethics-foundation",
-            summary: `Philosophical views of right and wrong and pragmatic views of what is common sense form the foundation for rules of conduct in computing.`
-          }
-        ]
-      },
-      {
-        name: "10.02 The Computing Professional",
-        id: "computing-professional",
-        children: [
-          {
-            name: "Professional Organisations",
-            id: "prof-org",
-            children: [
-              {
-                name: "BCS Code of Conduct",
-                id: "bcs-code",
-                children: [
-                  { name: "Public Interest", id: "bcs-public-interest" },
-                  { name: "Professional Competence & Integrity", id: "bcs-competence" },
-                  { name: "Duty to Relevant Authority", id: "bcs-duty-authority" },
-                  { name: "Duty to the Profession", id: "bcs-duty-profession" }
-                ]
-              },
-              {
-                name: "IEEE-CS/ACM Joint Task Force Principles",
-                id: "ieee-acm-principles",
-                children: [
-                  { name: "1. PUBLIC", id: "ieee-principle1", summary: "Act consistently with the public interest." },
-                  { name: "2. CLIENT AND EMPLOYER", id: "ieee-principle2", summary: "Act in best interests of client and employer consistent with public interest." },
-                  { name: "3. PRODUCT", id: "ieee-principle3", summary: "Ensure products meet highest professional standards." },
-                  { name: "4. JUDGEMENT", id: "ieee-principle4", summary: "Maintain integrity and independence in professional judgement." },
-                  { name: "5. MANAGEMENT", id: "ieee-principle5", summary: "Promote an ethical approach to management." },
-                  { name: "6. PROFESSION", id: "ieee-principle6", summary: "Advance integrity and reputation of the profession." },
-                  { name: "7. COLLEAGUES", id: "ieee-principle7", summary: "Be fair to and supportive of colleagues." },
-                  { name: "8. SELF", id: "ieee-principle8", summary: "Participate in lifelong learning and promote ethical practice." }
-                ]
-              }
-            ]
-          },
-          {
-            name: "Worked Example 10.01",
-            id: "worked-example",
-            children: [
-              { name: "Scenario 1", id: "scenario1", summary: "Challenge the manager; decision reversed; fully-tested product." },
-              { name: "Scenario 2", id: "scenario2", summary: "Challenge the manager; protests ignored." },
-              { name: "Scenario 3", id: "scenario3", summary: "No challenge; errors addressed via maintenance." },
-              { name: "Scenario 4", id: "scenario4", summary: "Intend to raise matter later when errors evident." }
-            ]
-          },
-          {
-            name: "Discussion: Documentation",
-            id: "discussion-10-01",
-            summary: `Search the eight principles for documentation mentions and discuss why documentation is emphasised so often.`
-          }
-        ]
-      },
-      {
-        name: "10.03 The Public Good",
-        id: "public-good",
-        children: [
-          {
-            name: "Key References",
-            id: "public-good-concepts",
-            summary: `References to health, safety, welfare of the public, public interest, good, concern.`
-          },
-          {
-            name: "Examples",
-            id: "public-good-examples",
-            children: [
-              { name: "Ariane 5 Rocket", id: "ariane5", summary: "Explosion due to 64-bit to 16-bit conversion overflow; ~$500M lost." },
-              { name: "Mars Climate Orbiter", id: "mars-orbiter", summary: "Unit mismatch (imperial vs SI); ~$125M lost." },
-              { name: "NHS IT Programme", id: "nhs-it", summary: "Scrapped in 2011; £12B spent vs <£3B initial estimate." }
-            ]
-          },
-          {
-            name: "Discussion Point",
-            id: "discussion-10-03",
-            summary: `Search individual cases and consider justified actions for the public good.`
-          }
-        ]
-      },
-      {
-        name: "10.04 Ownership & Copyright",
-        id: "copyright",
-        children: [
-          { name: "Definition", id: "copyright-definition", summary: `Formal recognition of ownership; cannot apply to ideas; organisational exceptions.` },
-          { name: "Applicable Works", id: "copyright-can", summary: `Literary, musical, film, recording, broadcast, art, computer programs.` },
-          { name: "Justification", id: "copyright-justification", summary: `Time, effort, originality; fairness against unauthorized reproduction.` },
-          { name: "Typical Laws", id: "copyright-laws", summary: `Registration, duration, post-mortem policy, symbol usage.` },
-          { name: "Implications", id: "copyright-implications", summary: `Usage permissions; ACM code example; library photocopy rights.` }
-        ]
-      },
-      {
-        name: "10.05 Software Licensing",
-        id: "software-licensing",
-        children: [
-          { name: "Commercial Software", id: "licensing-commercial", summary: `Vendor retains ownership; license defines terms; purchase options; shareware vs freeware; examples.` },
-          { name: "Open/Free Licensing", id: "licensing-open", summary: `OSI vs Free Software Foundation philosophies; copyleft; user freedoms; examples.` },
-          { name: "Task 10.01", id: "task-10-01", summary: `Carry out a search to investigate software under an open licence.` }
-        ]
-      },
-      {
-        name: "10.06 Artificial Intelligence",
-        id: "ai",
-        children: [
-          { name: "Overview", id: "ai-overview", summary: `Interdisciplinary definition: performing tasks associated with human intelligence.` },
-          { name: "Problem Solving", id: "ai-problem-solving", summary: `Chess systems; expert systems for diagnosis; limited creativity.` },
-          { name: "Linguistics", id: "ai-linguistics", summary: `Voice recognition/synthesis; automated help lines.` },
-          { name: "Perception", id: "ai-perception", summary: `Industrial robots; autonomous robots; driverless car parking examples.` },
-          { name: "Reasoning", id: "ai-reasoning", summary: `Theorem proving; software verification against specs.` },
-          { name: "Learning", id: "ai-learning", summary: `Machine learning from large datasets; recommendation engines; spam filters.` },
-          {
-            name: "Impact of AI",
-            id: "ai-impact",
-            children: [
-              { name: "Data & Privacy", id: "ai-impact-data", summary: `Mass data collection; risk of misuse.` },
-              { name: "Employment", id: "ai-impact-employment", summary: `Automation impacts jobs; more leisure vs job loss debate.` },
-              { name: "Autonomous Systems", id: "ai-impact-autonomous", summary: `Robot deployment in hazardous environments; environmental impact of manufacturing/disposal.` },
-              { name: "Healthcare", id: "ai-impact-healthcare", summary: `Expert systems aid doctors; implications if replaced by AI.` }
-            ]
-          },
-          { name: "Discussion Point", id: "discussion-ai", summary: `Have you seen recent developments in AI?` },
-          { name: "Reflection Point", id: "reflection-ai", summary: `Is there a professional CS organisation in your country? Encourage youth involvement?` },
-          { name: "Summary", id: "summary", summary: `- Definitions of ethics
-- Professional conduct codes
-- Software disasters and ethics
-- Copyright principles
-- Licensing models
-- AI focus on autonomy and learning` }
-        ]
-      }
-    ]
-  };
-
-  const activeNodeName = findNodeName(activeNode, data);
+  const activeNodeName = findName(activeNode, data);
   const isNodeHidden = activeNode ? hiddenNodes.has(activeNode) : false;
 
-  // Use effect hook for D3 logic
+  const selectNode = (d: d3.HierarchyPointNode<MindmapNode>) => {
+    setActiveNode(d.data.id);
+    setInfoContent(d.data.summary || `${d.data.name} – No summary yet.`);
+    setSaveStatus('');
+    setPanelMode('choice');
+  };
+  
+
   useEffect(() => {
     if (!svgRef.current) return;
-    const width = 1200;
-    const height = 800;
-    const radius = Math.min(width, height) / 2 * 1.2;
+  
+    /* ────────── SVG scaffold ────────── */
+    const width = 1200, height = 800,
+          radius = Math.min(width, height) / 2 * 0.9;
+  
     const svg = d3.select(svgRef.current)
-      .attr('width', width)
+      .attr('width',  width)
       .attr('height', height)
       .attr('viewBox', [-width / 2, -height / 2, width, height])
-      .style('font', '6px sans-serif');
-    svg.selectAll("*").remove();
+      .style('font', '10px sans-serif');
+  
+    svg.selectAll('*').remove();
     const g = svg.append('g');
-    const treeLayout = d3.tree<MindmapNode>()
-      .size([2 * Math.PI, radius])
-      .separation((a, b) => (a.parent == b.parent ? 2 : 4) / a.depth);
+  
+    /* stop the default context‑menu that pops up on two‑finger click */
+    svg.on('contextmenu', e => e.preventDefault());
+  
+    /* ────────── radial tree layout ────────── */
     const root = d3.hierarchy(data);
-    const treeData = treeLayout(root);
-    g.append("g")
-      .attr("fill", "none")
-      .attr("stroke", "#ccc")
-      .attr("stroke-opacity", 0.7)
-      .attr("stroke-width", 1.5)
-      .selectAll("path")
+    const treeData = d3.tree<MindmapNode>()
+      .size([2 * Math.PI, radius])
+      .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth)(root);
+  
+    const linkGen = d3.linkRadial<
+      d3.HierarchyPointLink<MindmapNode>,
+      d3.HierarchyPointNode<MindmapNode>>()
+        .angle(d => d.x)
+        .radius(d => d.y);
+  
+    const linkGroup = g.append('g')
+      .attr('fill', 'none')
+      .attr('stroke', '#ccc')
+      .attr('stroke-opacity', 0.7)
+      .attr('stroke-width', 1.5)
+      .selectAll('path')
       .data(treeData.links())
-      .join("path")
-      .attr("d", d3.linkRadial<any, d3.HierarchyPointNode<MindmapNode>>()
-        .angle(node => node.x)
-        .radius(node => node.y));
-    const colorScale = d3.scaleOrdinal<string, string>()
-      .domain(["0", "1", "2", "3", "4"])
-      .range(["#4299E1", "#48BB78", "#F6AD55", "#F56565", "#9F7AEA"]);
-    const node = g.append("g")
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-width", 3)
-      .selectAll("g")
+      .join('path')
+      .attr('d', linkGen);
+  
+    /* ────────── nodes (group, circle, label) ────────── */
+    const colour = d3.scaleOrdinal<string>()
+      .domain(['0','1','2','3','4'])
+      .range(['#4299E1','#48BB78','#F6AD55','#F56565','#9F7AEA']);
+  
+    const node = g.append('g')
+      .attr('stroke-linejoin', 'round')
+      .attr('stroke-width', 3)
+      .selectAll<SVGGElement, d3.HierarchyPointNode<MindmapNode>>('g')
       .data(treeData.descendants())
-      .join("g")
-      .attr("transform", d => `rotate(${(d.x * 180 / Math.PI - 90)}) translate(${d.y},0)`)
-      .attr("data-id", d => d.data.id);
-    node.append("circle")
-      .attr("fill", (d: any) => colorScale(d.depth.toString()))
-      .attr("r", d => d.data.id === "ch10-root" ? 10 : 6)
-      .style("cursor", "pointer")
-      .on("click", (event: MouseEvent, d: any) => {
-        setActiveNode(d.data.id);
-        setInfoContent(d.data.summary || `${d.data.name} - No summary available.`);
-        setSaveStatus('');
+      .join('g')
+      .attr('data-id', d => d.data.id)
+      .attr('transform', d =>
+        `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
+  
+    /* circle */
+    node.append('circle')
+      .attr('fill', d => colour(d.depth.toString()))
+      .attr('r', d => d.data.id === 'chapter-14' ? 10 : 6)
+      .style('cursor', 'pointer')
+      .on('mouseover', (e, d) =>
+        d3.select(e.currentTarget).attr('r',
+          d.data.id === 'chapter-14' ? 12 : 8).attr('stroke', 'black'))
+      .on('mouseout', (e, d) =>
+        d3.select(e.currentTarget).attr('r',
+          d.data.id === 'chapter-14' ? 10 : 6).attr('stroke', null));
+  
+    /* label */
+    node.append('text')
+      .attr('dy', '0.31em')
+      .style('font-size', '10px')
+      .style('font-weight', 'bold')
+      .style('pointer-events', 'none')
+      .attr('text-anchor', d => d.x < Math.PI ? 'start' : 'end')
+      .attr('fill', d =>
+        hiddenNodes.has(d.data.id) ? '#2D3748' : colour(d.depth.toString()))
+      .attr('transform', d => {
+        const inv = -(d.x * 180 / Math.PI - 90);
+        const h   = d.x < Math.PI ? 8 : -8;
+        return `rotate(${inv}) translate(${h},0)`;
       })
-      .on("mouseover", (event: MouseEvent, d: any) => {
-        d3.select(event.currentTarget as SVGCircleElement)
-          .attr('r', (d: any) => d.data.id === 'ch10-root' ? 12 : 8)
-          .attr('stroke', 'black');
+      .text(d => d.data.name);
+  
+    /* ────────── drag (only if two‑finger/right click) ────────── */
+    const dragBehaviour = d3
+      .drag<SVGGElement, d3.HierarchyPointNode<MindmapNode>>()
+      /*  filter keeps left‑clicks for opening, right‑clicks for drag  */
+      .filter(event => event.button === 2 || event.buttons === 2)
+      .on('start', function (event, d) {
+        event.sourceEvent.stopPropagation();       // keep zoom idle
+        event.defaultPrevented = true;             // suppress click later
+        d3.select(this).raise();
+  
+        syncToPointer(event, d);
+        moveNode(this, d);
+        linkGroup.attr('d', linkGen);
       })
-      .on("mouseout", (event: MouseEvent, d: any) => {
-        d3.select(event.currentTarget as SVGCircleElement)
-          .attr('r', (d: any) => d.data.id === 'ch10-root' ? 10 : 6)
-          .attr('stroke', null);
+      .on('drag', function (event, d) {
+        syncToPointer(event, d);
+        moveNode(this, d);
+        linkGroup.attr('d', linkGen);
       });
-    node.append("text")
-      .attr("data-id", d => d.data.id)
-      .attr("transform", (d: any) => {
-        const inverseRotation = -(d.x * 180 / Math.PI - 90);
-        const horizontalOffset = d.x < Math.PI ? 8 : -8;
-        return `rotate(${inverseRotation}) translate(${horizontalOffset}, 0)`;
-      })
-      .attr("dy", "0.31em")
-      .attr("text-anchor", (d: any) => d.x < Math.PI ? "start" : "end")
-      .attr("fill", (d: any) => hiddenNodes.has(d.data.id) ? "#2D3748" : colorScale(d.depth.toString()))
-      .style("font-size", "6px")
-      .style("font-weight", "bold")
-      .style("pointer-events", "none")
-      .text((d: any) => d.data.name);
-    if (!activeNode) {
-      setInfoContent("Click on any node to see detailed information about that topic from Chapter 10.");
-    }
-    const zoomBehavior = d3.zoom<SVGSVGElement, unknown>()
+  
+    node.call(dragBehaviour);               // ① drag attached first
+  
+    /* click attached AFTER drag so defaultPrevented check works */
+    node.on('click', (event, d) => {
+      if (event.defaultPrevented) return;   // ignore right‑drag sequence
+  
+      setActiveNode(d.data.id);
+      setInfoContent(d.data.summary || `${d.data.name} – No summary yet.`);
+      setSaveStatus('');
+      setPanelMode('choice');
+    });
+  
+    /* ────────── zoom / pan ────────── */
+    const zoomer = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.3, 3])
-      .on("zoom", (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
-        g.attr("transform", event.transform.toString());
-        setZoom(event.transform.k);
+      .on('zoom', ev => {
+        g.attr('transform', ev.transform.toString());
+        setZoom(ev.transform.k);
       });
-    zoomRef.current = zoomBehavior;
-    svg.call(zoomBehavior)
-      .on("dblclick.zoom", null);
-    const initialTransform = d3.zoomIdentity.translate(0, 0).scale(0.8);
-    svg.call(zoomBehavior.transform, initialTransform);
-    return () => {
-      if (svgRef.current) {
-        svg.on('.zoom', null);
-      }
-    };
+  
+    zoomRef.current = zoomer;
+    svg.call(zoomer).on('dblclick.zoom', null);
+    svg.call(zoomer.transform, d3.zoomIdentity.translate(0, 0).scale(0.8));
+  
+    if (!activeNode) {
+      setInfoContent('Click on any node for full exam‑ready notes.');
+    }
+  
+    return () => { svg.on('.zoom', null); };
+  
+    /* ─── helpers ───────────────────────────────────────── */
+    function syncToPointer(event: any, d: d3.HierarchyPointNode<MindmapNode>) {
+      const t           = d3.zoomTransform(svgRef.current as SVGSVGElement);
+      const [ux, uy]    = t.invert([event.x, event.y]);
+      let angle         = Math.atan2(uy, ux) + Math.PI / 2;
+      if (angle < 0) angle += 2 * Math.PI;
+      d.x = angle;
+      d.y = Math.hypot(ux, uy);
+    }
+    function moveNode(el: SVGGElement, d: d3.HierarchyPointNode<MindmapNode>) {
+      d3.select(el)
+        .attr('transform',
+          `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
+  
+      const inv = -(d.x * 180 / Math.PI - 90);
+      const h   = d.x < Math.PI ? 8 : -8;
+      d3.select(el).select('text')
+        .attr('transform', `rotate(${inv}) translate(${h},0)`)
+        .attr('text-anchor', d.x < Math.PI ? 'start' : 'end');
+    }
   }, [hiddenNodes]);
+    // dependencies stay unchanged
+  
+  
 
   return (
     <div className="flex flex-col w-full h-screen bg-gray-800 text-white">
       <div className="p-2 bg-gray-700 text-center sticky top-0 z-10">
-        <h1 className="text-xl font-semibold">Chapter 10: Ethics, Copyright, Licensing, and AI</h1>
+        <h1 className="text-xl font-semibold">Topic 14: Programming &amp; Data Representation</h1>
       </div>
+
       <div className="flex-grow flex flex-col md:flex-row overflow-hidden">
-        {/* Mindmap Area */}
         <div className="w-full md:w-2/3 h-2/3 md:h-full overflow-hidden relative bg-gray-900">
-          <svg ref={svgRef} className="w-full h-full"></svg>
+          <svg ref={svgRef} className="w-full h-full" />
           <div className="absolute bottom-4 right-4 bg-gray-800 rounded-lg shadow-lg p-2 flex flex-col space-y-2">
-            <button
-              onClick={handleZoomIn}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center"
-              aria-label="Zoom in"
-            >
-              <span className="text-xl">+</span>
-            </button>
-            <button
-              onClick={handleZoomOut}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center"
-              aria-label="Zoom out"
-            >
-              <span className="text-xl">-</span>
-            </button>
-            <button
-              onClick={handleReset}
-              className="bg-gray-600 hover:bg-gray-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center"
-              aria-label="Reset zoom"
-            >
-              <span className="text-sm">Reset</span>
-            </button>
+            <button onClick={handleZoomIn} className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center" aria-label="Zoom in"><span className="text-xl">+</span></button>
+            <button onClick={handleZoomOut} className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center" aria-label="Zoom out"><span className="text-xl">−</span></button>
+            <button onClick={handleReset} className="bg-gray-600 hover:bg-gray-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center" aria-label="Reset zoom"><span className="text-sm">Reset</span></button>
           </div>
         </div>
-        {/* Information Panel */}
+
         <div className="w-full md:w-1/3 h-1/3 md:h-full p-4 bg-gray-700 overflow-y-auto border-t md:border-t-0 md:border-l border-gray-600">
           <div className="bg-gray-800 rounded-lg shadow p-4">
             <h2 className="text-lg font-semibold mb-2">
-              {activeNodeName || "Topic Information"}
-              {isNodeHidden && <span className="text-sm text-gray-400 ml-2">(Hidden)</span>}
+              {activeNodeName || 'Topic Information'} {isNodeHidden && <span className="text-sm text-gray-400 ml-2">(Hidden)</span>}
             </h2>
+
             <div className="prose prose-invert max-w-none text-gray-300 whitespace-pre-line mb-4">
-              {infoContent ? (
-                <p>{infoContent}</p>
-              ) : (
-                <p>Click on a node in the mindmap to see detailed information about that topic from Chapter 10.</p>
-              )}
+             {activeNode && panelMode === 'choice' && (
+  <AnsweringChoices
+    onShowAnswer={() => setPanelMode('answer')}
+    onTryAnswer={() => setPanelMode('recording')}
+  />
+)}
+
+{panelMode === 'recording' && (
+  <VoiceCapture onFinished={async (base64) => {
+    const res = await fetch('/api/speechToText', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ audioBase64: base64 })
+    });
+    const { text } = await res.json();
+    setTranscript(text);
+    setPanelMode('feedback');          // triggers <Assessment>
+  }} />
+)}
+
+{panelMode === 'answer' && <p className="whitespace-pre-wrap">{infoContent}</p>}
+
+{panelMode === 'feedback' && (
+  <div className="prose prose-invert text-gray-300 whitespace-pre-line mb-4">
+    <h3 className="text-lg font-semibold mb-1">Transcribed Answer:</h3>
+    <p>{transcript}</p>
+  </div>
+)}
+{panelMode === 'feedback' && (
+  <>
+    <Assessment
+      transcript={transcript}
+      modelAnswer={infoContent}
+      question={activeNodeName ?? ''}
+    />
+    <p className="whitespace-pre-wrap mt-4">{infoContent}</p>
+  </>
+)}
             </div>
-            {saveStatus && (
-              <div className="mb-4 p-2 bg-green-600 text-white rounded-md text-center">
-                {saveStatus}
-              </div>
-            )}
-            {activeNode && (
+
+            {saveStatus && <div className="mb-4 p-2 bg-green-600 text-white rounded-md text-center">{saveStatus}</div>}
+
+            {activeNode && (panelMode === 'answer' || panelMode === 'feedback') && (
               <div className="space-y-2">
+                {/* "I know this very well" button */}
                 <button
                   onClick={toggleNodeVisibility}
                   className={`px-4 py-2 rounded-md font-medium w-full ${
                     isNodeHidden
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : "bg-green-600 hover:bg-green-700 text-white"
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                      : 'bg-green-600 hover:bg-green-700 text-white'
                   }`}
                 >
                   {isNodeHidden
-                    ? "I need to review this, show it"
-                    : "I know this very well, hide it"}
+                    ? 'I need to review this, show it'
+                    : 'I know this very well, hide it'}
                 </button>
+
+                {/* "I need to revise this later" button */}
                 <button
-                  onClick={saveNoteForRevision}
+                  onClick={() =>
+                    saveNoteForRevision(
+                      activeNodeName,
+                      infoContent,
+                      'computerScience',
+                      10,
+                      setSaveStatus,
+                      setIsSaving
+                    )
+                  }
                   className="px-4 py-2 rounded-md font-medium w-full bg-red-600 hover:bg-red-700 text-white"
                 >
                   I need to revise this later, save it
@@ -459,4 +664,4 @@ const CsCh10MindMap: React.FC = () => {
   );
 };
 
-export default CsCh10MindMap;
+export default ChapterTenMindMap;

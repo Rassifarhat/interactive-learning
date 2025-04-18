@@ -19,49 +19,49 @@ function escapeCsvField(field: string) {
 }
 
 export async function POST(request: NextRequest) {
+  console.log('API /api/saveNote POST invoked');
   try {
     const body = await request.json() as RequestBody;
+    console.log('API /api/saveNote received body:', body);
     const { note, field = '', chapter = '', answer = '' } = body;
     
     if (!note || typeof note !== 'string') {
       return NextResponse.json({ error: 'No valid note content provided' }, { status: 400 });
     }
 
-    // Generate a simple question from the note (replace with API call if needed)
-    const question = `What is: ${note}`;
-
-    // Write to NotesToReviseActiveRecall.csv
-    const csvFilePath = path.join(process.cwd(), 'public', 'NotesToReviseActiveRecall.csv');
-    const csvHeader = 'field,chapter,question,answer\n';
-    const csvRow = [field, chapter, question, answer || note].map(f => escapeCsvField(String(f))).join(',') + '\n';
-
-    // Ensure file exists, create with header if not
-    try {
-      await fs.access(csvFilePath);
-    } catch (error: unknown) {
-      if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
-        await fs.writeFile(csvFilePath, csvHeader, 'utf8');
-      } else {
-        throw error;
-      }
+    // Use OpenAI to generate a clear revision question
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json({ error: 'OpenAI API key not configured' }, { status: 500 });
     }
-    await fs.appendFile(csvFilePath, csvRow, 'utf8');
+    const aiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: 'Generate a concise, unambiguous question based on the following note for revision purposes:' },
+          { role: 'user', content: note },
+        ],
+        temperature: 0.7,
+      }),
+    });
+    const aiJson = await aiRes.json();
+    const question = aiJson.choices?.[0]?.message?.content?.trim() || note.slice(0,100);
 
-    // Also append to notesToRevise.txt as before (optional, for legacy)
-    const filePath = path.join(process.cwd(), 'public', 'notesToRevise.txt');
-    try {
-      await fs.access(filePath);
-    } catch (error: unknown) {
-      if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
-         await fs.writeFile(filePath, '', 'utf8');
-      } else {
-        throw error;
-      }
-    }
-    const existingContent = await fs.readFile(filePath, 'utf8');
-    await fs.writeFile(filePath, existingContent + note, 'utf8');
+    // Build directory and file path
+    const dirPath = path.join(process.cwd(), 'public', 'revisionNotes', field);
+    await fs.mkdir(dirPath, { recursive: true });
+    const fileName = field === 'computerScience' ? `csCardsCh${chapter}.csv` : `chemCardsCh${chapter}.csv`;
+    const csvPath = path.join(dirPath, fileName);
+    const header = 'question,answer\n';
+    try { await fs.access(csvPath); } catch { await fs.writeFile(csvPath, header, 'utf8'); }
+    const row = [question, note].map(f => escapeCsvField(String(f))).join(',') + '\n';
+    await fs.appendFile(csvPath, row, 'utf8');
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, question });
   } catch (error: unknown) {
     console.error('Error saving note:', error);
     const message = error instanceof Error ? error.message : 'An unknown error occurred';

@@ -1,0 +1,57 @@
+What are the advantages and differences between peer-to-peer networking and client-server file downloading models?,"# Peer-to-Peer Model
+In a peer-to-peer network, computers connect directly to each other without relying on a dedicated server. Each peer can function as both a client and a server, requesting and providing resources.
+
+Advantages of peer-to-peer networking compared to client-server file downloading include:
+- Avoids network congestion when many clients download simultaneously
+- Parts of files can be downloaded separately
+- Files are available from multiple hosts
+
+Client-server advantages include:
+- Organizations can better control file downloading and usage
+- Files can be better protected from malware through centralized security measures
+
+Saved on: 2025-04-18T04:57:43.242Z
+
+---
+
+"
+What are the advantages and differences between peer-to-peer networking and client-server file downloading?,"# Peer-to-Peer Model
+In a peer-to-peer network, computers connect directly to each other without relying on a dedicated server. Each peer can function as both a client and a server, requesting and providing resources.
+
+Advantages of peer-to-peer networking compared to client-server file downloading include:
+- Avoids network congestion when many clients download simultaneously
+- Parts of files can be downloaded separately
+- Files are available from multiple hosts
+
+Client-server advantages include:
+- Organizations can better control file downloading and usage
+- Files can be better protected from malware through centralized security measures
+
+Saved on: 2025-04-18T06:57:56.242Z
+
+---
+
+"
+What are the key characteristics and limitations of mesh topology in computer networking?,"# Mesh Topology
+In a mesh topology, each device connects directly to every other device in the network. This topology:
+
+- Uses point-to-point connections between all end-systems
+- Supports duplex transmission and all message types
+- Provides multiple paths for data, enhancing reliability
+- Requires extensive cabling, making it impractical for large end-system networks
+
+Mesh topologies are more commonly used to connect network infrastructure devices like switches and routers rather than end-user systems.
+
+Saved on: 2025-04-18T07:12:01.318Z
+
+---
+
+"
+What technologies and infrastructure components enable the functioning of the Internet as the world's largest internetwork connecting millions of smaller networks globally?,"# Internet Technologies
+The Internet is the world's largest internetwork, connecting millions of smaller networks globally. Various technologies and infrastructure components make this possible.
+
+Saved on: 2025-04-18T07:17:40.275Z
+
+---
+
+"

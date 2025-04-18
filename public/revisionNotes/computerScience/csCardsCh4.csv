@@ -1,0 +1,14 @@
+"How does operator precedence impact the evaluation of logic expressions, and how can parentheses be used to control the order of operations in complex expressions with multiple operators?","# How does operator precedence affect the evaluation of logic expressions?
+When evaluating complex logic expressions with multiple operators, precedence rules determine the order of operations. Using brackets (parentheses) can explicitly define the intended order. In expressions with multiple operators, the standard precedence is:
+
+1. NOT (highest)
+2. AND
+3. OR (lowest)
+
+For example, in A OR B AND C, the AND operation is performed before the OR operation.
+
+Saved on: 2025-04-18T09:20:33.266Z
+
+---
+
+"

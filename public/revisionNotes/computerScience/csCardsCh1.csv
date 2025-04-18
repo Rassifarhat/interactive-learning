@@ -1,0 +1,56 @@
+"What are the basic rules for binary addition and subtraction, and how does overflow impact binary arithmetic operations?","# Binary Arithmetic
+Basic rules for binary addition:
+0+0=0
+0+1=1
+1+0=1
+1+1=0 (with carry 1)
+
+Binary subtraction can be performed directly or by using two's complement (adding the negative of the number).
+
+A key issue in binary arithmetic is overflow, which occurs when the result of an operation is too large to be represented in the allocated number of bits. This can lead to unexpected results, particularly when using two's complement representation.
+
+Saved on: 2025-04-18T07:16:37.225Z
+
+---
+
+"
+What is the denary (decimal) number system and how does it represent values with its base-10 structure?,"# What is the denary (decimal) system and how does it represent values?
+The denary (decimal) number system is base-10 and uses the digits 0-9. Each position in a denary number represents a power of 10.
+
+For example, the number 346 represents: (3 × 10²) + (4 × 10¹) + (6 × 10⁰) = 300 + 40 + 6 = 346
+
+This is the number system we use in everyday life.
+
+Saved on: 2025-04-18T07:29:05.499Z
+
+---
+
+"
+"What are the methods used to represent numeric values and large quantities in computing, and what is the distinction between decimal and binary prefixes?","# How are numeric values and large quantities represented in computing, and what is the difference between decimal and binary prefixes?
+This section covers how to represent numeric values, especially large quantities with prefixes, and the distinction between decimal and binary prefixes.
+
+Saved on: 2025-04-18T08:13:35.899Z
+
+---
+
+"
+"How does the memory hierarchy impact speed, capacity, and cost as you move through its levels in a computer system?","# What is the memory hierarchy and how do speed, capacity, and cost change through its levels?
+The memory hierarchy represents the organization of storage components in a computer system based on access speed, capacity, and cost. At the top of the hierarchy are fast but limited-capacity registers and cache memory, followed by main memory, then secondary storage devices like hard disks and auxiliary storage. Moving down the hierarchy, access time and capacity increase while cost per unit of storage decreases.
+
+Saved on: 2025-04-18T09:08:28.644Z
+
+---
+
+"
+How can binary and denary numbers be converted using the place value and successive division methods?,"# What methods can you use to convert between binary and denary numbers?
+There are two common methods for converting between binary and denary:
+
+1. Place value method: To convert binary to denary, add the place values for each '1' bit. For example, 11001 = 16 + 8 + 1 = 25
+
+2. Successive division method: To convert denary to binary, divide repeatedly by 2 and record remainders. Example: 246 ÷ 2 = 123 remainder 0, 123 ÷ 2 = 61 remainder 1, etc. Then read remainders in reverse: 11110110
+
+Saved on: 2025-04-18T09:12:22.212Z
+
+---
+
+"

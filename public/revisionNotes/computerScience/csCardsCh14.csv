@@ -1,0 +1,62 @@
+What is the definition of a molecule?,"# Define a molecule.
+Two or more atoms covalently bonded in a fixed ratio, neutral overall.
+
+Saved on: 2025-04-18T06:30:17.255Z
+
+---
+
+"
+In what ways does the denary (decimal) number system operate and how is it represented mathematically based on the positions of digits?,"# Denary Numbers
+The denary (decimal) number system is base-10 and uses the digits 0-9. Each position in a denary number represents a power of 10.
+
+For example, the number 346 represents: (3 × 10²) + (4 × 10¹) + (6 × 10⁰) = 300 + 40 + 6 = 346
+
+This is the number system we use in everyday life.
+
+Saved on: 2025-04-18T06:55:28.475Z
+
+---
+
+"
+"What is the process for converting hexadecimal to binary and vice versa, and how can binary numbers be converted to hexadecimal using the given rules?","# Hexadecimal Conversions
+Converting hexadecimal to binary: Each hex digit converts to 4 bits
+0 → 0000, 1 → 0001, ..., 9 → 1001, A → 1010, B → 1011, ..., F → 1111
+
+Converting binary to hexadecimal: Group bits into sets of 4, starting from the right, and convert each group to a hex digit.
+
+Example: Binary 1011 0101 to hex: 1011 = B, 0101 = 5, so the result is B5
+
+Saved on: 2025-04-18T07:03:00.508Z
+
+---
+
+"
+What do decimal prefixes represent and provide examples of commonly used ones?,"# Decimal Prefixes
+Decimal prefixes represent powers of 10:
+
+- kilo (k): 10³ = 1,000
+- mega (M): 10⁶ = 1,000,000
+- giga (G): 10⁹ = 1,000,000,000
+- tera (T): 10¹² = 1,000,000,000,000
+
+For example, 23.567 km means 23.567 × 10³ meters.
+
+Saved on: 2025-04-18T07:06:58.185Z
+
+---
+
+"
+"What are the two representation methods for signed integers, and why is two's complement the most commonly used method in computers?","# Integer Coding
+Unsigned integers are stored simply as binary numbers. The number of bytes allocated determines the range of possible values.
+
+For signed integers (that can be positive or negative), two representation methods exist:
+
+1. Sign and magnitude: Uses one bit to indicate the sign (0 for positive, 1 for negative)
+
+2. Two's complement: The most common method used in computers for representing signed integers.
+
+Saved on: 2025-04-18T07:12:46.017Z
+
+---
+
+"
