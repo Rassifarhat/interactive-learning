@@ -37,24 +37,50 @@ export default function Home() {
         </p>
       </div>
       <div className="flex flex-wrap gap-6 justify-center mb-10">
+        {/* Stack Chemistry buttons vertically */}
+        <div className="flex flex-col gap-3 mr-6">
         <button
-          className={`px-6 py-3 rounded bg-blue-700 text-white hover:bg-blue-800 transition-all text-xl font-semibold ${subject === 'cs' ? 'ring-2 ring-yellow-400' : ''}`}
-          onClick={() => setSubject('cs')}
-        >
-          Computer Science
-        </button>
-        <button
-          className={`px-6 py-3 rounded bg-green-700 text-white hover:bg-green-800 transition-all text-xl font-semibold ${subject === 'chem' ? 'ring-2 ring-yellow-400' : ''}`}
-          onClick={() => { setSubject('chem'); setShowRevision(false); setShowRequirements(false); }}
-        >
-          Chemistry
-        </button>
-        <button
-          className="px-6 py-3 rounded bg-green-600 text-white hover:bg-green-700 transition-all text-xl font-semibold"
-          onClick={() => { setShowRequirements(true); setShowRevision(false); setSubject(null); setRevisionSubject(null); }}
-        >
-          Chemistry Requirements
-        </button>
+            className="px-6 py-3 rounded bg-green-600 text-white hover:bg-green-700 transition-all text-xl font-semibold"
+            onClick={() => { setShowRequirements(true); setShowRevision(false); setSubject(null); setRevisionSubject(null); }}
+          >
+            Chemistry Requirements
+          </button>
+          <button
+            className={`px-6 py-3 rounded bg-green-700 text-white hover:bg-green-800 transition-all text-xl font-semibold ${subject === 'chem' ? 'ring-2 ring-yellow-400' : ''}`}
+            onClick={() => { setSubject('chem'); setShowRevision(false); setShowRequirements(false); }}
+          >
+            Chemistry
+          </button>
+         
+          <button
+            className={`px-6 py-3 rounded bg-emerald-700 text-white hover:bg-emerald-800 transition-all text-xl font-semibold ${subject === 'chemExt' ? 'ring-2 ring-yellow-400' : ''}`}
+            onClick={() => setSubject(subject === 'chemExt' ? null : 'chemExt')}
+          >
+            Chemistry Extended
+          </button>
+        </div>
+        {/* Stack Computer Science buttons vertically */}
+        <div className="flex flex-col gap-3 mx-6">
+          <button
+            className="px-6 py-3 rounded bg-blue-600 text-white hover:bg-blue-700 transition-all text-xl font-semibold"
+            onClick={() => { setShowRequirements(true); setShowRevision(false); setSubject(null); setRevisionSubject(null); }}
+          >
+            Computer Science Requirements
+          </button>
+          <button
+            className={`px-6 py-3 rounded bg-blue-700 text-white hover:bg-blue-800 transition-all text-xl font-semibold ${subject === 'cs' ? 'ring-2 ring-yellow-400' : ''}`}
+            onClick={() => { setSubject('cs'); setShowRevision(false); setShowRequirements(false); setRevisionSubject(null); }}
+          >
+            Computer Science
+          </button>
+          <button
+            className={`px-6 py-3 rounded bg-blue-800 text-white hover:bg-blue-900 transition-all text-xl font-semibold ${subject === 'csExt' ? 'ring-2 ring-yellow-400' : ''}`}
+            onClick={() => { setSubject(subject === 'csExt' ? null : 'csExt'); setShowRequirements(false); setShowRevision(false); setRevisionSubject(null); }}
+          >
+            Computer Science Extended
+          </button>
+        </div>
+        {/* Other subject buttons horizontally */}
         <button
           className={`px-6 py-3 rounded bg-purple-700 text-white hover:bg-purple-800 transition-all text-xl font-semibold ${subject === 'phys' ? 'ring-2 ring-yellow-400' : ''}`}
           onClick={() => setSubject('phys')}
@@ -81,6 +107,32 @@ export default function Home() {
             {subject === 'cs' && <ComputerScience />}
             {subject === 'phys' && <Physics />}
             {subject === 'math' && <Mathematics />}
+            {subject === 'chemExt' && (
+              <div className="flex flex-wrap gap-4 justify-center mb-10 mt-6">
+                {Array.from({ length: 10 }, (_, i) => (
+                  <Link
+                    key={i + 1}
+                    href={i + 1 === 10 ? '/chemExtCh10' : `/chemExtCh${i + 1}`}
+                    className="px-4 py-2 border rounded m-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    Chapter {i + 1}
+                  </Link>
+                ))}
+              </div>
+            )}
+            {subject === 'csExt' && (
+              <div className="flex flex-wrap gap-4 justify-center mb-10 mt-6">
+                {Array.from({ length: 15 }, (_, i) => (
+                  <Link
+                    key={i + 1}
+                    href={`/csExtCh${i + 1}`}
+                    className="px-4 py-2 border rounded m-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Chapter {i + 1}
+                  </Link>
+                ))}
+              </div>
+            )}
           </>
         )}
         {showRevision && revisionSubject === null && (

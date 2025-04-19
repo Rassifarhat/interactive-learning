@@ -54,3 +54,11 @@ Saved on: 2025-04-18T09:12:22.212Z
 ---
 
 "
+How do you convert a negative denary integer to its two's complement binary form?,"# Explain the process of converting a negative denary integer to its two's complement binary form.
+1. Disregard the sign of the denary value and convert it to binary. 2. Add a 0 in front of the binary value. 3. Convert this binary value to its two's complement form.
+
+Saved on: 2025-04-19T12:59:36.410Z
+
+---
+
+"

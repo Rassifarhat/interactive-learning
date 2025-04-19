@@ -1,0 +1,8 @@
+What is the distinction between relative addressing and absolute addressing in assembly language programming?,"# Explain the difference between relative addressing and absolute addressing in assembly language programming.
+Relative addressing uses offsets from a base register to determine instruction locations, while absolute addressing specifies exact memory addresses for instructions.
+
+Saved on: 2025-04-19T16:15:33.542Z
+
+---
+
+"
