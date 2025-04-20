@@ -12,3 +12,11 @@ Saved on: 2025-04-18T09:20:33.266Z
 ---
 
 "
+"Could you clarify the distinction between a conjunction and a disjunction in Boolean logic, and provide examples to illustrate each?","# Explain the difference between a conjunction and a disjunction in Boolean logic with examples.
+A conjunction (AND) requires both propositions to be true for the overall statement to be true, e.g., 'It is raining AND the forecast is for rain later.' A disjunction (OR) requires at least one proposition to be true, e.g., 'It is raining OR the forecast is for rain later.'
+
+Saved on: 2025-04-20T16:57:54.934Z
+
+---
+
+"

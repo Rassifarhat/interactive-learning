@@ -32,7 +32,7 @@ export default function ComputerScience() {
             <div className="p-4 flex flex-col space-y-3 flex-grow justify-center">
               <Link href={`/csCh${chapter.num}`} className="block text-center text-blue-300 hover:text-blue-100 hover:bg-blue-700 rounded py-2 px-3 transition-colors duration-200 font-medium border border-transparent hover:border-blue-500">Mind Map</Link>
               <Link href={`/flashcards?file=csCh${chapter.num}Csv.csv`} className="block text-center text-green-300 hover:text-green-100 hover:bg-green-700 rounded py-2 px-3 transition-colors duration-200 font-medium border border-transparent hover:border-green-500">Flashcards</Link>
-              <Link href={`/flashcards?file=csExercisesCh${chapter.num}.csv`} className="block text-center text-yellow-300 hover:text-yellow-100 hover:bg-yellow-700 rounded py-2 px-3 transition-colors duration-200 font-medium border border-transparent hover:border-yellow-500">Exercises</Link>
+              <Link href={`/csExercisesPageCh${chapter.num}`} className="block text-center text-yellow-300 hover:text-yellow-100 hover:bg-yellow-700 rounded py-2 px-3 transition-colors duration-200 font-medium border border-transparent hover:border-yellow-500">Exercises</Link>
               <Link href="#" className="block text-center text-purple-300 hover:text-purple-100 hover:bg-purple-700 rounded py-2 px-3 transition-colors duration-200 font-medium border border-transparent hover:border-purple-500">Audio Lecture</Link>
             </div>
           </div>

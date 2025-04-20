@@ -1,0 +1,283 @@
+// Define the Exercise type
+export type Exercise = {
+  id: string;
+  question: string;
+  modelAnswer: string;
+  explanation: string;
+  commonMistakeTip: string;
+};
+
+// Exercises for Chapter 13: Data Types and Structures
+export const exercises: Exercise[] = [
+  {
+    id: "13.1",
+    question: `For each of the following variables described in a program scenario, identify the most appropriate data type and briefly justify your choice:
+a) age – whole years
+b) temperature – may have fractional degrees
+c) firstInitial – single letter of last name
+d) fullName – person's full name
+e) isMember – library membership status (true/false)
+f) appointmentDate – calendar date (day, month, year)`,
+    modelAnswer: `// a) Integer – holds whole numbers for age (no fraction)
+// b) Real – stores decimal values for temperature (e.g. 23.5)
+// c) Char – single character initial
+// d) String – sequence of characters, including spaces
+// e) Boolean – true/false for membership
+// f) Date – composite type grouping day, month, year`,
+    explanation: `Each choice uses the type best matching the variable’s characteristics: Integer for whole years; Real for fractional values; Char for a single character; String for sequences of characters; Boolean for binary status; Date to encapsulate day, month, and year together.`,
+    commonMistakeTip: `Use precise terminology (e.g., Integer vs Number) and choose composite types (Date) when grouping related fields.`
+  },
+  {
+    id: "13.2",
+    question: `Explain type casting and write pseudocode to:
+1. Read age as a string
+2. Cast it to Integer
+3. Add 1
+4. Output the result`,
+    modelAnswer: `DECLARE ageText : STRING
+DECLARE ageNum  : INTEGER
+
+OUTPUT "Please enter your age: "
+INPUT ageText                // e.g. "18"
+ageNum ← INT(ageText)        // cast to integer
+ageNum ← ageNum + 1          // increment
+OUTPUT "Next year, you will be " & STRING(ageNum) & " years old."`,
+    explanation: `Type casting converts data from one type to another so you can perform numeric operations on text (and convert back for output).`,
+    commonMistakeTip: `Always explicitly cast before arithmetic to avoid type-mismatch errors, and cast back to string for concatenation.`
+  },
+  {
+    id: "13.3",
+    question: `Determine results and explain:
+a) 7 DIV 2
+b) 7 / 2 (real division)
+c) REAL(7) / 2
+d) 7 MOD 2`,
+    modelAnswer: `a) 3    // integer quotient
+b) 3.5  // real division
+c) 3.5  // explicit real cast
+d) 1    // remainder of integer division`,
+    explanation: `DIV gives whole quotient; / yields fractional result when real; MOD gives remainder. Casting to real forces floating-point division.`,
+    commonMistakeTip: `Use DIV for integer division and MOD for remainders; cast operands to real to get fractional results.`
+  },
+  {
+    id: "13.4",
+    question: `Define a record type BookType with fields Title:String, Author:String, Year:Integer, IsHardcover:Boolean, then declare Book1 and assign sample values. Show how to output Book1.Title.`,
+    modelAnswer: `TYPE BookType
+    Title       : STRING
+    Author      : STRING
+    Year        : INTEGER
+    IsHardcover : BOOLEAN
+ENDTYPE
+
+DECLARE Book1 : BookType
+Book1.Title       ← "The Time Machine"
+Book1.Author      ← "H.G. Wells"
+Book1.Year        ← 1895
+Book1.IsHardcover ← FALSE
+
+OUTPUT "Book title: " & Book1.Title`,
+    explanation: `Defines a composite type grouping book attributes, then uses dot notation to assign and access fields.`,
+    commonMistakeTip: `Remember dot notation for record fields and ensure record is declared before use.`
+  },
+  {
+    id: "13.5",
+    question: `Declare a 1D array Scores[0:4] of integers, input 5 values via loop, compute and output average.`,
+    modelAnswer: `DECLARE Scores : ARRAY[0:4] OF INTEGER
+FOR i ← 0 TO 4
+    OUTPUT "Enter score ", i, ": "
+    INPUT Scores[i]
+NEXT i
+
+declare total : INTEGER ← 0
+FOR i ← 0 TO 4
+    total ← total + Scores[i]
+NEXT i
+DECLARE average : REAL
+average ← total / 5
+OUTPUT "Average score = " & average`,
+    explanation: `Uses loops for input and summing, declares average as real to avoid truncation.`,
+    commonMistakeTip: `Initialize accumulators and use correct bounds (0 to length-1).`
+  },
+  {
+    id: "13.6",
+    question: `Perform a linear search on Names[0:9] for targetName; output index if found or "not found".`,
+    modelAnswer: `DECLARE found : BOOLEAN ← FALSE
+DECLARE index : INTEGER ← 0
+WHILE index <= 9 AND NOT found
+    IF Names[index] = targetName THEN
+        found ← TRUE
+    ELSE
+        index ← index + 1
+    ENDIF
+ENDWHILE
+IF found THEN
+    OUTPUT "Found " & targetName & " at index " & index
+ELSE
+    OUTPUT "Name not found"
+ENDIF`,
+    explanation: `Checks each element until match or end; uses flag to stop early.`,
+    commonMistakeTip: `Ensure loop condition prevents out-of-bounds and resets flag per search.`
+  },
+  {
+    id: "13.7",
+    question: `Dry-run trace table for:
+A=[3,8,2,5,6], target=5; show i and foundFlag each iteration, then output.`,
+    modelAnswer: `// Iteration | i | foundFlag
+// 1         | 0 | FALSE
+// 2         | 1 | FALSE
+// 3         | 2 | FALSE
+// 4         | 3 | TRUE
+OUTPUT "Target found at index " & i`,
+    explanation: `Iterates until match at index 3, then exits loop and outputs index.`,
+    commonMistakeTip: `Show initial values and update flag before breaking; don’t trace beyond match.`
+  },
+  {
+    id: "13.8",
+    question: `Given Data[0:N-1], write procedure to find and output min and max values.`,
+    modelAnswer: `PROCEDURE FindMinMax(Data, N)
+    minVal ← Data[0]; maxVal ← Data[0]
+    FOR i ← 1 TO N-1
+        IF Data[i] < minVal THEN minVal ← Data[i] ENDIF
+        IF Data[i] > maxVal THEN maxVal ← Data[i] ENDIF
+    NEXT i
+    OUTPUT "Min = " & minVal
+    OUTPUT "Max = " & maxVal
+ENDPROCEDURE`,
+    explanation: `Initializes to first element, then updates trackers in single pass.`,
+    commonMistakeTip: `Initialize trackers to first element, not arbitrary constants.`
+  },
+  {
+    id: "13.9",
+    question: `Trace bubble sort on [42,15,23,8,16] after each pass; give final sorted array.`,
+    modelAnswer: `// After Pass1: [15,23,8,16,42]
+// After Pass2: [15,8,16,23,42]
+// After Pass3: [8,15,16,23,42]
+// After Pass4: [8,15,16,23,42]
+Final: [8,15,16,23,42]`,
+    explanation: `Each pass bubbles largest to end; stops when no swaps occur.`,
+    commonMistakeTip: `Document array state at end of each full pass, not each swap.`
+  },
+  {
+    id: "13.10",
+    question: `Modify bubble sort comparison for descending order.`,
+    modelAnswer: `// Change IF A[j] > A[j+1] THEN swap to:
+IF A[j] < A[j+1] THEN swap`,
+    explanation: `Reverse comparison so larger elements move left (highest first).`,
+    commonMistakeTip: `Only invert the comparison; loop structure remains unchanged.`
+  },
+  {
+    id: "13.11",
+    question: `Count occurrences of 'A' or 'a' in user-input sentence.`,
+    modelAnswer: `DECLARE countA ← 0
+sentence ← UPPERCASE(INPUT())
+FOR i ← 0 TO LENGTH(sentence)-1
+    IF sentence[i] = 'A' THEN countA ← countA + 1 ENDIF
+NEXT i
+OUTPUT countA`,
+    explanation: `Normalize case then tally each 'A'.`,
+    commonMistakeTip: `Reset counter before loop and handle empty strings correctly.`
+  },
+  {
+    id: "13.12",
+    question: `Sum each row of a 3×4 Table[row,col] and output row totals.`,
+    modelAnswer: `FOR r ← 0 TO 2
+    rowSum ← 0
+    FOR c ← 0 TO 3
+        rowSum ← rowSum + Table[r,c]
+    NEXT c
+    OUTPUT "Sum of row " & r & " = " & rowSum
+NEXT r`,
+    explanation: `Nested loops accumulate per-row sums.`,
+    commonMistakeTip: `Reset rowSum inside outer loop, not before both loops.`
+  },
+  {
+    id: "13.13",
+    question: `For Matrix[1:4,1:3], a) total elements b) valid ranges c) refer to element at (3,2).`,
+    modelAnswer: `a) 4×3 = 12
+b) rows 1–4, cols 1–3
+c) Matrix[3,2]`,
+    explanation: `Multiply dimensions for total; indices follow declared ranges; use row,col order.`,
+    commonMistakeTip: `Distinguish 1-based vs 0-based indexing when interpreting bounds.`
+  },
+  {
+    id: "13.14",
+    question: `Read lines from "students.txt" into Names[0:99] until EOF, then output count.`,
+    modelAnswer: `OPENFILE "students.txt" FOR READ
+count ← 0
+WHILE NOT EOF("students.txt")
+    READFILE "students.txt", Names[count]
+    count ← count + 1
+ENDWHILE
+CLOSEFILE "students.txt"
+OUTPUT count`,
+    explanation: `Loop until end-of-file, storing each line and incrementing index.`,
+    commonMistakeTip: `Check EOF before READFILE to avoid reading past end.`
+  },
+  {
+    id: "13.15",
+    question: `Write HighScores[0:4] to "scores.txt", one per line.`,
+    modelAnswer: `OPENFILE "scores.txt" FOR WRITE
+FOR i ← 0 TO 4
+    WRITEFILE "scores.txt", HighScores[i]
+NEXT i
+CLOSEFILE "scores.txt"`,
+    explanation: `Iterate array and write each element, then close file.`,
+    commonMistakeTip: `Open file in correct mode (write vs append) as required.`
+  },
+  {
+    id: "13.16",
+    question: `Design data structure for up to 50 employees: record EmployeeType and array Employees[0:49]. Explain lookup by EmployeeID.`,
+    modelAnswer: `TYPE EmployeeType
+    EmployeeID  : INTEGER
+    Name        : STRING
+    DateOfBirth : DATE
+    IsManager   : BOOLEAN
+ENDTYPE
+DECLARE Employees : ARRAY[0:49] OF EmployeeType`,
+    explanation: `Array of records groups each employee’s data; lookup by linear search on EmployeeID.`,
+    commonMistakeTip: `Ensure record fields match requirements and use meaningful names.`
+  },
+  {
+    id: "13.17",
+    question: `Read "books.txt" with lines Title,Author,Year,IsFiction into Books[0:199] array of BookType records. Output first title+author and count.`,
+    modelAnswer: `TYPE BookType
+    Title     : STRING
+    Author    : STRING
+    Year      : INTEGER
+    IsFiction : BOOLEAN
+ENDTYPE
+DECLARE Books : ARRAY[0:199] OF BookType
+count ← 0
+OPENFILE "books.txt" FOR READ
+WHILE NOT EOF("books.txt")
+    READFILE "books.txt", line
+    titleField,authorField,yearField,fictionField ← SPLIT(line, ",")
+    Books[count].Title     ← titleField
+    Books[count].Author    ← authorField
+    Books[count].Year      ← INT(yearField)
+    Books[count].IsFiction ← (fictionField = "TRUE")
+    count ← count + 1
+ENDWHILE
+CLOSEFILE "books.txt"
+IF count>0 THEN OUTPUT "First book: " & Books[0].Title & " by " & Books[0].Author ENDIF
+OUTPUT "Total books read: " & count`,
+    explanation: `Uses SPLIT to parse CSV, converts types, and stores in record array.`,
+    commonMistakeTip: `Handle type conversion and ensure SPLIT returns correct number of fields.`
+  },
+  {
+    id: "13.18",
+    question: `Describe two key differences between in-memory arrays and file storage, and when to use each.`,
+    modelAnswer: `1. Volatility: arrays are in RAM and lost after program ends; files on disk persist.
+2. Access: arrays allow O(1) indexed access; files are typically sequential access unless indexed.`,
+    explanation: `Array for fast, temporary data manipulation; file for persistence and large datasets.`,
+    commonMistakeTip: `Highlight both lifecycle and access-pattern distinctions clearly.`
+  },
+  {
+    id: "13.19",
+    question: `Compare linear vs binary search on 1000-element sorted array: describe methods and worst-case comparisons; choose appropriate.`,
+    modelAnswer: `Linear: checks each element up to 1000 → O(n) ~1000 comparisons.
+Binary: halves search space each time → O(log n) ~10 comparisons.`,
+    explanation: `Binary search requires sorted data but is far more efficient for large arrays.`,
+    commonMistakeTip: `Mention sorted-data requirement and approximate log₂ computations.`
+  }
+];

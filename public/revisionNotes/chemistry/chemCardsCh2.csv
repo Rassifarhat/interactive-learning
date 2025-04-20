@@ -1,0 +1,50 @@
+"What is the predicted mass spectrum for chlorine gas when analyzed using a mass spectrometer, considering the relative abundances of its stable isotopes Cl-35 and Cl-37?","# A sample of chlorine gas is analyzed using a mass spectrometer. Given that chlorine has two stable isotopes, Cl-35 and Cl-37, with relative abundances of 75% and 25% respectively, predict the mass spectrum for chlorine, including the relative peak heights for each isotope and the molecular ion peak for Cl2.
+The mass spectrum will show three main peaks: one at m/z 70 (Cl2-35), one at m/z 72 (Cl-35Cl-37), and one at m/z 74 (Cl2-37). The relative peak heights will be approximately 9:6:1, corresponding to the isotopic abundances (Cl-35: 75% x 75% = 56.25%, Cl-35/Cl-37: 75% x 25% = 18.75%, Cl-37: 25% x 25% = 6.25%).
+
+Saved on: 2025-04-20T05:41:47.397Z
+
+---
+
+"
+"""Why is the relative atomic mass of an element always within the range of the relative isotopic masses of its isotopes?""","# Explain why the relative atomic mass of an element is always between the relative isotopic masses of its isotopes.
+The relative atomic mass is a weighted average of the isotopic masses, reflecting the natural abundance of each isotope, thus it must fall between the lowest and highest isotopic masses.
+
+Saved on: 2025-04-20T05:41:56.379Z
+
+---
+
+"
+"""Why is the relative atomic mass of an element consistently within the range of the relative isotopic masses of its isotopes?""","# Explain why the relative atomic mass of an element is always between the relative isotopic masses of its isotopes.
+The relative atomic mass is a weighted average of the isotopic masses, reflecting the natural abundance of each isotope, thus it must fall between the lowest and highest isotopic masses.
+
+Saved on: 2025-04-20T05:42:03.712Z
+
+---
+
+"
+What specific data was obtained from the mass spectrometer for analysis?,"# USING DATA OBTAINED FROM A MASS SPECTROMETER
+
+
+
+
+Saved on: 2025-04-20T05:42:14.678Z
+
+---
+
+"
+"What is the difference between relative atomic mass and relative isotopic mass, and how are they defined?","# Define relative atomic mass and relative isotopic mass.
+Relative atomic mass is the weighted mean mass of an atom of an element compared to 1/12 the mass of carbon-12. Relative isotopic mass is the mass of an atom of an isotope compared to 1/12 the mass of carbon-12.
+
+Saved on: 2025-04-20T05:42:22.095Z
+
+---
+
+"
+How can a mass spectrum be utilized to determine the relative atomic mass of an element?,"# Explain how a mass spectrum can be used to determine the relative atomic mass of an element.
+A mass spectrum provides the relative masses of isotopes and their percentage abundances. By multiplying the mass of each isotope by its abundance (as a fraction), summing these values, and dividing by the total abundance, the relative atomic mass can be calculated.
+
+Saved on: 2025-04-20T05:42:30.262Z
+
+---
+
+"
