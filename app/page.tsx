@@ -36,6 +36,7 @@ export default function Home() {
           with love from your dad!
         </p>
       </div>
+
       <div className="flex flex-wrap gap-6 justify-center mb-10">
         {/* Stack Chemistry buttons vertically */}
         <div className="flex flex-col gap-3 mr-6">

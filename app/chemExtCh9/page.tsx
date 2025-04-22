@@ -89,6 +89,37 @@ const ChapterFourteenMindMap: React.FC = () => {
   const activeNodeName = findName(activeNode, data);
   const isNodeHidden   = activeNode ? hiddenNodes.has(activeNode) : false;
 
+  // Storage key for hidden nodes
+  const STORAGE_KEY = 'chemgraph-hidden-nodes-ch9';
+
+  // Load hidden nodes from localStorage on component mount
+  useEffect(() => {
+    try {
+      const savedNodes = localStorage.getItem(STORAGE_KEY);
+      if (savedNodes) {
+        const parsedNodes = JSON.parse(savedNodes);
+        if (Array.isArray(parsedNodes)) {
+          const validNodes = parsedNodes.filter(node => typeof node === 'string');
+          if (validNodes.length > 0) {
+            setHiddenNodes(new Set(validNodes));
+          }
+        }
+      }
+    } catch (err) {
+      console.error('[DEBUG] Error loading hidden nodes from localStorage:', err);
+    }
+  }, []);
+
+  // Save hidden nodes to localStorage whenever they change
+  useEffect(() => {
+    try {
+      const nodesArray = Array.from(hiddenNodes);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nodesArray));
+    } catch (err) {
+      console.error('[DEBUG] Error saving hidden nodes to localStorage:', err);
+    }
+  }, [hiddenNodes]);
+
   useEffect(() => {
     if (!svgRef.current) return;
 
@@ -257,6 +288,18 @@ const dragBehaviour = d3
 
     return () => void svg.on('.zoom', null);
   }, [hiddenNodes]);   // deps unchanged
+
+  // Apply hidden node styles after initial render or changes
+  useEffect(() => {
+    if (!svgRef.current) return;
+    
+    // Apply hidden styles to all hidden nodes
+    hiddenNodes.forEach(nodeId => {
+      d3.select(svgRef.current)
+        .selectAll(`text[data-id="${nodeId}"]`)
+        .attr('fill', '#2D3748');
+    });
+  }, [hiddenNodes]);
 
   /* ───────────────────────── render ───────────────────────── */
   return (

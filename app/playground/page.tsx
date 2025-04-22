@@ -13,6 +13,7 @@ export default function Playground() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState('#000000');
   const [lineWidth, setLineWidth] = useState(2);
+  const [eraserSize, setEraserSize] = useState(4);
   const [isEraser, setIsEraser] = useState(false);
   const [isAssessing, setIsAssessing] = useState(false);
   const [assessment, setAssessment] = useState<string | null>(null);
@@ -40,6 +41,9 @@ export default function Playground() {
 
   // Line widths for the line width picker
   const lineWidths = [1, 2, 3, 5, 8];
+  
+  // Eraser sizes for the eraser size picker - offering larger options
+  const eraserSizes = [3, 5, 8, 25, 40];
 
   // Initialize canvas context
   useEffect(() => {
@@ -97,7 +101,20 @@ export default function Playground() {
     if (!canvasRef.current || !context) return;
     
     const canvas = canvasRef.current;
+    
+    // First clear the entire canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Then redraw the horizontal lines
     drawHorizontalLines(context, canvas.width, canvas.height);
+    
+    // Reset the drawing state and context properties
+    setIsDrawing(false);
+    context.globalCompositeOperation = 'source-over';
+    context.strokeStyle = color;
+    context.lineWidth = isEraser ? eraserSize : lineWidth;
+    context.lineCap = 'round';
+    context.lineJoin = 'round';
 
     // Reset assessment if there was one
     setAssessment(null);
@@ -134,12 +151,13 @@ export default function Playground() {
     if (isEraser) {
       context.globalCompositeOperation = 'destination-out';
       context.strokeStyle = 'rgba(255,255,255,1)';
+      context.lineWidth = eraserSize; // Use the selected eraser size
     } else {
       context.globalCompositeOperation = 'source-over';
       context.strokeStyle = color;
+      context.lineWidth = lineWidth;
     }
     
-    context.lineWidth = isEraser ? lineWidth * 3 : lineWidth; // Larger eraser
     context.lineCap = 'round';
     context.lineJoin = 'round';
   };
@@ -369,6 +387,30 @@ export default function Playground() {
                 Eraser {isEraser && '(Active)'}
               </button>
             </div>
+            
+            {/* Add Eraser Size picker - only show when eraser is active */}
+            {isEraser && (
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Eraser Size</label>
+                <div className="flex gap-2">
+                  {eraserSizes.map((size) => (
+                    <button
+                      key={size}
+                      className={`w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center ${eraserSize === size ? 'ring-2 ring-white' : ''}`}
+                      onClick={() => setEraserSize(size)}
+                    >
+                      <div
+                        className="rounded-full bg-white"
+                        style={{
+                          width: `${Math.min(size, 8)}px`,
+                          height: `${Math.min(size, 8)}px`
+                        }}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             
             <div>
               <button

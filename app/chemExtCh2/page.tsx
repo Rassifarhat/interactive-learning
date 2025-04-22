@@ -33,6 +33,38 @@ const ChapterFourteenMindMap: React.FC = () => {
   type PanelMode = 'choice' | 'answer' | 'recording' | 'feedback';
   const [panelMode, setPanelMode] = useState<PanelMode>('choice');
 
+  // Storage key for hidden nodes
+  const STORAGE_KEY = 'chemgraph-hidden-nodes-ch2';
+
+  // Load hidden nodes from localStorage on component mount
+  useEffect(() => {
+    try {
+      const savedNodes = localStorage.getItem(STORAGE_KEY);
+      if (savedNodes) {
+        const parsedNodes = JSON.parse(savedNodes);
+        if (Array.isArray(parsedNodes)) {
+          // Filter to ensure we only have strings
+          const validNodes = parsedNodes.filter(node => typeof node === 'string');
+          if (validNodes.length > 0) {
+            setHiddenNodes(new Set(validNodes));
+          }
+        }
+      }
+    } catch (err) {
+      console.error('[DEBUG] Error loading hidden nodes from localStorage:', err);
+    }
+  }, []);
+
+  // Save hidden nodes to localStorage whenever they change
+  useEffect(() => {
+    try {
+      const nodesArray = Array.from(hiddenNodes);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nodesArray));
+    } catch (err) {
+      console.error('[DEBUG] Error saving hidden nodes to localStorage:', err);
+    }
+  }, [hiddenNodes]);
+
   /* ───────────────────────── helpers ───────────────────────── */
 
   /** convert a screen‑space point (px,py) into polar coords (angle,r) */
@@ -174,61 +206,59 @@ const ChapterFourteenMindMap: React.FC = () => {
       })
       .text(d => d.data.name);
 
-/* ────────── drag (two‑finger / right‑click) ────────── */
-const dragBehaviour = d3
-  .drag<SVGGElement, d3.HierarchyPointNode<MindmapNode>>()
-  .filter(ev => ev.button === 2 || ev.buttons === 2)  // right‑click / two‑finger only
-  .on('start', function(event, d) {
-    event.sourceEvent.stopPropagation();
-    event.defaultPrevented = true;
-    d3.select(this).raise();
-  })
-  .on('drag', function(event, d) {
-    // 1) Compute node's current local‐space coords:
-    //    (we want the tip of the translate(r,0) after rotate)
-    const theta = d.x - Math.PI/2;
-    const x0    = d.y * Math.cos(theta);
-    const y0    = d.y * Math.sin(theta);
+    /* ────────── drag (two‑finger / right‑click) ────────── */
+    const dragBehaviour = d3
+      .drag<SVGGElement, d3.HierarchyPointNode<MindmapNode>>()
+      .filter(ev => ev.button === 2 || ev.buttons === 2)  // right‑click / two‑finger only
+      .on('start', function(event, d) {
+        event.sourceEvent.stopPropagation();
+        event.defaultPrevented = true;
+        d3.select(this).raise();
+      })
+      .on('drag', function(event, d) {
+        // 1) Compute node's current local‐space coords:
+        //    (we want the tip of the translate(r,0) after rotate)
+        const theta = d.x - Math.PI/2;
+        const x0    = d.y * Math.cos(theta);
+        const y0    = d.y * Math.sin(theta);
 
-    // 2) Turn those into SCREEN coords via the current zoom/pan:
-    const t     = d3.zoomTransform(svgRef.current as SVGSVGElement);
-    const [sx0, sy0] = t.apply([x0, y0]);
+        // 2) Turn those into SCREEN coords via the current zoom/pan:
+        const t     = d3.zoomTransform(svgRef.current as SVGSVGElement);
+        const [sx0, sy0] = t.apply([x0, y0]);
 
-    // 3) Add the raw drag deltas (which are already in screen space):
-    const sx1 = sx0 + event.dx;
-    const sy1 = sy0 + event.dy;
+        // 3) Add the raw drag deltas (which are already in screen space):
+        const sx1 = sx0 + event.dx;
+        const sy1 = sy0 + event.dy;
 
-    // 4) Invert back to LOCAL coords:
-    const [ux1, uy1] = t.invert([sx1, sy1]);
+        // 4) Invert back to LOCAL coords:
+        const [ux1, uy1] = t.invert([sx1, sy1]);
 
-    // 5) Convert to polar:
-    let angle1 = Math.atan2(uy1, ux1) + Math.PI/2;
-    if (angle1 < 0) angle1 += 2 * Math.PI;
-    const r1 = Math.hypot(ux1, uy1);
+        // 5) Convert to polar:
+        let angle1 = Math.atan2(uy1, ux1) + Math.PI/2;
+        if (angle1 < 0) angle1 += 2 * Math.PI;
+        const r1 = Math.hypot(ux1, uy1);
 
-    // 6) Update node data:
-    d.x = angle1;
-    d.y = Math.max(20, r1);   // prevent collapse through center
+        // 6) Update node data:
+        d.x = angle1;
+        d.y = Math.max(20, r1);   // prevent collapse through center
 
-    // 7) Re‑draw this node:
-    d3.select(this)
-      .attr(
-        'transform',
-        `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`
-      );
+        // 7) Re‑draw this node:
+        d3.select(this)
+          .attr(
+            'transform',
+            `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`
+          );
 
-    // 8) Re‑orient its label:
-    const inv = -(d.x * 180 / Math.PI - 90);
-    const h   = d.x < Math.PI ? 8 : -8;
-    d3.select(this).select('text')
-      .attr('transform', `rotate(${inv}) translate(${h},0)`)
-      .attr('text-anchor', d.x < Math.PI ? 'start' : 'end');
+        // 8) Re‑orient its label:
+        const inv = -(d.x * 180 / Math.PI - 90);
+        const h   = d.x < Math.PI ? 8 : -8;
+        d3.select(this).select('text')
+          .attr('transform', `rotate(${inv}) translate(${h},0)`)
+          .attr('text-anchor', d.x < Math.PI ? 'start' : 'end');
 
-    // 9) Re‑draw links:
-    linkGroup.attr('d', linkGen);
-  });
-
-
+        // 9) Re‑draw links:
+        linkGroup.attr('d', linkGen);
+      });
 
     node.call(dragBehaviour);
 
@@ -257,6 +287,18 @@ const dragBehaviour = d3
 
     return () => void svg.on('.zoom', null);
   }, [hiddenNodes]);   // deps unchanged
+
+  // Apply hidden node styles after initial render or changes
+  useEffect(() => {
+    if (!svgRef.current) return;
+    
+    // Apply hidden styles to all hidden nodes
+    hiddenNodes.forEach(nodeId => {
+      d3.select(svgRef.current)
+        .selectAll(`text[data-id="${nodeId}"]`)
+        .attr('fill', '#2D3748');
+    });
+  }, [hiddenNodes]);
 
   /* ───────────────────────── render ───────────────────────── */
   return (

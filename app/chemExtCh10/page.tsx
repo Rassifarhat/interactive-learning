@@ -18,7 +18,9 @@ interface MindmapNode {
   children?: MindmapNode[];
 }
 
-
+// ────────────────────────────────────────────────────────────────────────────────
+// Component
+// ────────────────────────────────────────────────────────────────────────────────
 const ChapterFourteenMindMap: React.FC = () => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [infoContent, setInfoContent] = useState<string>('');
@@ -27,13 +29,42 @@ const ChapterFourteenMindMap: React.FC = () => {
   const [hiddenNodes, setHiddenNodes] = useState<Set<string>>(new Set());
   const [saveStatus, setSaveStatus] = useState<string>('');
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [transcript, setTranscript] = useState<string>('');
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
 
   type PanelMode = 'choice' | 'answer' | 'recording' | 'feedback';
-
   const [panelMode, setPanelMode] = useState<PanelMode>('choice');
-  const [transcript, setTranscript] = useState<string>('');
 
+  // Storage key for hidden nodes
+  const STORAGE_KEY = 'chemgraph-hidden-nodes-ch10';
+
+  // Load hidden nodes from localStorage on component mount
+  useEffect(() => {
+    try {
+      const savedNodes = localStorage.getItem(STORAGE_KEY);
+      if (savedNodes) {
+        const parsedNodes = JSON.parse(savedNodes);
+        if (Array.isArray(parsedNodes)) {
+          const validNodes = parsedNodes.filter(node => typeof node === 'string');
+          if (validNodes.length > 0) {
+            setHiddenNodes(new Set(validNodes));
+          }
+        }
+      }
+    } catch (err) {
+      console.error('[DEBUG] Error loading hidden nodes from localStorage:', err);
+    }
+  }, []);
+
+  // Save hidden nodes to localStorage whenever they change
+  useEffect(() => {
+    try {
+      const nodesArray = Array.from(hiddenNodes);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nodesArray));
+    } catch (err) {
+      console.error('[DEBUG] Error saving hidden nodes to localStorage:', err);
+    }
+  }, [hiddenNodes]);
 
   const handleZoomIn = () => {
     if (svgRef.current && zoomRef.current) d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 1.3);
@@ -229,9 +260,20 @@ const ChapterFourteenMindMap: React.FC = () => {
     }
   }, [hiddenNodes]);
     // dependencies stay unchanged
-  
-  
 
+  // Apply hidden node styles after initial render or changes
+  useEffect(() => {
+    if (!svgRef.current) return;
+    
+    // Apply hidden styles to all hidden nodes
+    hiddenNodes.forEach(nodeId => {
+      d3.select(svgRef.current)
+        .selectAll(`text[data-id="${nodeId}"]`)
+        .attr('fill', '#2D3748');
+    });
+  }, [hiddenNodes]);
+
+  /* ───────────────────────── render ───────────────────────── */
   return (
     <div className="flex flex-col w-full h-screen bg-gray-800 text-white">
       <div className="p-2 bg-gray-700 text-center sticky top-0 z-10">
