@@ -5,7 +5,7 @@ import { NextResponse, NextRequest } from 'next/server';
 
 interface RequestBody {
   note: string;
-  field?: string; // Chemistry, Physics, etc.
+  field?: string; // Chemistry, Physics, filipChemistry, etc.
   chapter?: string | number;
   answer?: string; // Optional, for future extensibility
 }
@@ -54,7 +54,18 @@ export async function POST(request: NextRequest) {
     // Build directory and file path
     const dirPath = path.join(process.cwd(), 'public', 'revisionNotes', field);
     await fs.mkdir(dirPath, { recursive: true });
-    const fileName = field === 'computerScience' ? `csCardsCh${chapter}.csv` : `chemCardsCh${chapter}.csv`;
+    
+    // Determine filename based on field
+    let fileName;
+    if (field === 'computerScience') {
+      fileName = `csCardsCh${chapter}.csv`;
+    } else if (field === 'filipChemistry') {
+      fileName = `filipChemCh${chapter}.csv`;
+    } else {
+      // Default to chemistry
+      fileName = `chemCardsCh${chapter}.csv`;
+    }
+    
     const csvPath = path.join(dirPath, fileName);
     const header = 'question,answer\n';
     try { await fs.access(csvPath); } catch { await fs.writeFile(csvPath, header, 'utf8'); }

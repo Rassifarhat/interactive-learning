@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction } from 'react';
  * Encapsulates the save note logic.
  * @param nodeName - Name of the active node
  * @param infoContent - Content to save
- * @param field - Subject field (e.g., 'computerScience' or 'chemistry')
+ * @param field - Subject field (e.g., 'computerScience', 'chemistry', or 'filipChemistry')
  * @param chapter - Chapter number
  * @param setSaveStatus - Setter for save status message
  * @param setIsSaving - Setter for loading state
@@ -13,7 +13,7 @@ import { Dispatch, SetStateAction } from 'react';
 export async function saveNoteForRevision(
   nodeName: string | null,
   infoContent: string,
-  field: 'computerScience' | 'chemistry',
+  field: 'computerScience' | 'chemistry' | 'filipChemistry',
   chapter: number,
   setSaveStatus: Dispatch<SetStateAction<string>>,
   setIsSaving: Dispatch<SetStateAction<boolean>>
