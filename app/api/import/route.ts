@@ -25,15 +25,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                       originalFilename.match(/ch[_\s-]*(\d+)/i);
   
   if (chapterMatch && chapterMatch[1]) {
-    filenameBase = `chapter${chapterMatch[1]}`;
+    filenameBase = `sarahCsCh${chapterMatch[1]}`;
   } else {
-    // Use the original filename without extension as a base
-    filenameBase = originalFilename.replace(/\.[^/.]+$/, "").replace(/[^a-z0-9]/gi, '-').toLowerCase();
-    
-    // If no meaningful name was extracted, use timestamp
-    if (!filenameBase || filenameBase.length < 2) {
-      filenameBase = `upload-${Date.now()}`;
-    }
+    // If no chapter number found, use a timestamp
+    const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    filenameBase = `sarahCsCh${timestamp}`;
   }
 
   const mdText = await file.text();

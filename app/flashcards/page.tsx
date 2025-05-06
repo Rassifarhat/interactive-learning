@@ -207,37 +207,54 @@ function FlashcardsContent() {
 
     setTitle(pageTitle);
     setFileKey(currentFileKey);
-    const csvUrl = `/${csvFileName}`; // Assuming files are in /public
+    // Make sure to use the correct path format for files in the public directory
+    // The "public" part of the path should not be included in the URL
+    const csvUrl = specificFile 
+      ? `/${specificFile}` 
+      : `/${csvFileName}`;
 
-    Papa.parse(csvUrl, {
-      download: true,
-      header: false, // since your file is Q,A with no header row
-      skipEmptyLines: true,
-      complete: (results: Papa.ParseResult<string[]>) => {
-        // Each row is [question, answer]
-        // Ensure data is string[][] and filter any potentially incomplete rows
-        const parsed: FlashcardData[] = results.data
-          .filter(row => Array.isArray(row) && row.length >= 2 && row[0] && row[1]) 
-          .map((row: string[]) => {
-            const question = row[0];
-            const answer = row[1];
-            // Generate a unique ID for this card
-            const id = generateCardId(question, currentFileKey);
-            return {
-              question,
-              answer,
-              id
-            };
-          });
-        setFlashcards(parsed);
+    console.log('Attempting to load CSV from:', csvUrl);
+    
+    // Add error handling for file not found
+    const fetchCSV = async () => {
+      try {
+        Papa.parse(csvUrl, {
+          download: true,
+          header: true, // Changed to true since we have a header row
+          skipEmptyLines: true,
+          complete: (results: Papa.ParseResult<any>) => {
+            console.log('CSV parsing complete:', results);
+            // Process the data
+            const parsed: FlashcardData[] = results.data
+              .filter((row: any) => row.question && row.answer) 
+              .map((row: any) => {
+                const question = row.question;
+                const answer = row.answer;
+                // Generate a unique ID for this card
+                const id = generateCardId(question, currentFileKey);
+                return {
+                  question,
+                  answer,
+                  id
+                };
+              });
+            setFlashcards(parsed);
+            setLoading(false);
+          },
+          error: (error) => {
+            console.error('Error fetching CSV:', error, csvUrl);
+            setError(`Error loading flashcards: ${error}. File path: ${csvUrl}`);
+            setLoading(false);
+          },
+        });
+      } catch (error) {
+        console.error('Exception in CSV parsing:', error);
+        setError(`Exception loading flashcards: ${error}`);
         setLoading(false);
-      },
-      error: (error) => {
-        console.error('Error fetching CSV:', error);
-        setError('Error loading flashcards.');
-        setLoading(false);
-      },
-    });
+      }
+    };
+
+    fetchCSV();
   }, [chapter, specificFile]);
 
   return (

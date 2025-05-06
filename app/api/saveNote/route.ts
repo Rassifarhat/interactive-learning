@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: 'Generate a concise, unambiguous question based on the following note for revision purposes:' },
           { role: 'user', content: note },
